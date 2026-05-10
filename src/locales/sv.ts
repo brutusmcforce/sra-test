@@ -48,7 +48,7 @@ export default {
     phonePlaceholder: "Telefon",
     removeAll: "Ta bort alla skyttar",
     randomize: "⤭ Slumpa ordning",
-    editInfo: "Redigera uppgifter",
+    editInfo: "Redigera provuppgifter",
     continue: "Fortsätt",
     startTest: "Starta skjuttestet",
     removeBtn: "🗑 TA BORT",

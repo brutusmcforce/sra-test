@@ -245,6 +245,10 @@ const reset = () => {
 </template>
 
 <style scoped>
+.accordion-header {
+  cursor: pointer;
+}
+
 main {
   background-image:
     linear-gradient(to bottom, rgba(233, 233, 233, 0.2), rgba(233, 233, 233, 1)),

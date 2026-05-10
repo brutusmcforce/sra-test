@@ -1,36 +1,45 @@
 <template>
   <div>
     <header style="background: #ddd">
-
       <div class="wrapper">
         <nav class="nav-menu">
-          <RouterLink to="/"><span class="icon">☰</span> {{ t('nav.resultList') }}</RouterLink>
-          <RouterLink to="/rules"><span class="icon">§</span> {{ t('nav.rules') }}</RouterLink>
-          <RouterLink to="/about"><span class="icon">ⓘ</span> {{ t('nav.about') }}</RouterLink>
-          <select class="lang-picker" :value="locale" @change="onLocaleChange" :aria-label="t('language.label')">
-            <option value="fi">{{ t('language.fi') }}</option>
-            <option value="sv">{{ t('language.sv') }}</option>
-            <option value="en">{{ t('language.en') }}</option>
+          <RouterLink to="/"
+            ><span class="icon">☰</span> {{ t("nav.resultList") }}</RouterLink
+          >
+          <RouterLink to="/rules"
+            ><span class="icon">§</span> {{ t("nav.rules") }}</RouterLink
+          >
+          <RouterLink to="/about"
+            ><span class="icon">ⓘ</span> {{ t("nav.about") }}</RouterLink
+          >
+          <select
+            class="lang-picker"
+            :value="locale"
+            @change="onLocaleChange"
+            :aria-label="t('language.label')"
+          >
+            <option value="sv">{{ t("language.sv") }}</option>
+            <option value="fi">{{ t("language.fi") }}</option>
+            <option value="en">{{ t("language.en") }}</option>
           </select>
         </nav>
       </div>
     </header>
 
     <RouterView />
-
   </div>
 </template>
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import { useI18n } from 'vue-i18n'
-import { setLocale } from '@/i18n'
+import { useI18n } from "vue-i18n";
+import { setLocale } from "@/i18n";
 
-const { t, locale } = useI18n()
+const { t, locale } = useI18n();
 
 const onLocaleChange = (event: Event) => {
-  const target = event.target as HTMLSelectElement
-  setLocale(target.value)
-}
+  const target = event.target as HTMLSelectElement;
+  setLocale(target.value);
+};
 </script>
 <style scoped>
 .lang-picker {

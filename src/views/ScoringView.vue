@@ -953,8 +953,7 @@ nav.stages {
     display: none;
   }
   & ul li:last-child a {
-    padding-right: :console.warn();
-    0px;
+    padding-right: 0px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
