@@ -2,46 +2,46 @@
 
 export {}
 
-Cypress.Commands.add("syotaAmpuja", (nimi: string) => {
-    cy.get('input[id="uusinimi"]').type(nimi).type('{enter}')
+Cypress.Commands.add("enterShooter", (name: string) => {
+    cy.get('input[id="new-name"]').type(name).type('{enter}')
 });
 
-Cypress.Commands.add("syotaAmpujat", () => {
+Cypress.Commands.add("enterShooters", () => {
     cy.visit('/')
-    cy.syotaAmpuja("Kaarlo Kaskela")
-    cy.syotaAmpuja("Helena Himanen")
-    cy.syotaAmpuja("Timo Nieminen")
-    cy.syotaAmpuja("Gisella Glock")
+    cy.enterShooter("Kaarlo Kaskela")
+    cy.enterShooter("Helena Himanen")
+    cy.enterShooter("Timo Nieminen")
+    cy.enterShooter("Gisella Glock")
 });
 
-Cypress.Commands.add("alustaKoe", () => {
-    cy.syotaAmpujat()
+Cypress.Commands.add("initTest", () => {
+    cy.enterShooters()
     cy.get('.action').contains('Jatka').click()
-    cy.get('input[id="turvallisuuskuittaus"]').click()
+    cy.get('input[id="safety-acknowledgment"]').click()
     cy.get('.action').contains('Jatka').click()
     cy.get('.action').contains('Aloita ampumakoe').click()
 });
 
-function randomAika(ohjeaika: number, ohjeajanmaxylitys: number) {
-    const randomAika = String(Math.round(100*(ohjeaika + ohjeajanmaxylitys*Math.random()))).replace(/0/g,'1')
-    return randomAika[0] + '{moveToEnd}' + randomAika.substring(1)
+function randomTime(guideTime: number, guideTimeMaxOverrun: number) {
+    const value = String(Math.round(100*(guideTime + guideTimeMaxOverrun*Math.random()))).replace(/0/g,'1')
+    return value[0] + '{moveToEnd}' + value.substring(1)
 }
 
-Cypress.Commands.add("aika1", (ohjeaika: number, maxylitys: number) => {
-    cy.get('input[id="aika1"]').type(randomAika(ohjeaika, maxylitys))
+Cypress.Commands.add("time1", (guideTime: number, maxOverrun: number) => {
+    cy.get('input[id="time1"]').type(randomTime(guideTime, maxOverrun))
 });
-Cypress.Commands.add("aika2", (ohjeaika: number, maxylitys: number) => {
-    cy.get('input[id="aika2"]').type(randomAika(ohjeaika, maxylitys))
+Cypress.Commands.add("time2", (guideTime: number, maxOverrun: number) => {
+    cy.get('input[id="time2"]').type(randomTime(guideTime, maxOverrun))
 });
-Cypress.Commands.add("aika3", (ohjeaika: number, maxylitys: number) => {
-    cy.get('input[id="aika3"]').type(randomAika(ohjeaika, maxylitys))
+Cypress.Commands.add("time3", (guideTime: number, maxOverrun: number) => {
+    cy.get('input[id="time3"]').type(randomTime(guideTime, maxOverrun))
 });
 
 // 60 % Alpha
 // 20 % Charlie
 // 15 % Delta
 //  5 % Mike
-function randomOsuma() {
+function randomHit() {
     const r = Math.random()
     if (r > .4) {
         return 'A'
@@ -54,7 +54,7 @@ function randomOsuma() {
     }
 }
 
-Cypress.Commands.add("ammu", (taulu: number, laukaukset: number) => {
-    for (let laukaus of Array(laukaukset))
-        cy.get('button[id=T' + taulu + randomOsuma() + 'plus]').click()
+Cypress.Commands.add("shoot", (target: number, shots: number) => {
+    for (let shot of Array(shots))
+        cy.get('button[id=T' + target + randomHit() + 'plus]').click()
 });

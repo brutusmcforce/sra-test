@@ -1,24 +1,22 @@
 <script setup lang="ts">
 
-import { usePisteetStore } from '@/stores/pisteet'
+import { useScoresStore } from '@/stores/scores'
 
-const pisteetStore = usePisteetStore()
-
-//const saannotChecked : boolean = false
+const scoresStore = useScoresStore()
 
 </script>
 
 
 <template>
 
-  <main class="turvallisuus">
-    <div class="sisalto">
+  <main class="safety">
+    <div class="content">
 
   <h1>Turvallisuus</h1>
   <p>
     Kaikessa aseen käytössä on noudatettava seuraavia turvallisen aseenkäsittelyn sääntöjä:
   </p>
-  <ol class="kasittelysaannot">
+  <ol class="handling-rules">
     <li><b>Asetta on aina käsiteltävä kuin se olisi ladattu</b>.
       Ei ole merkitystä, onko ase ladattu tai onko ase toimimaton käsittelyase, käsittelyn on aina oltava
       samanlaista.</li>
@@ -33,13 +31,13 @@ const pisteetStore = usePisteetStore()
       omia taistelijoita tai sivullisia.</li>
   </ol>
 
-  <div class="turvallisuuscheckbox">
-    <input v-model="pisteetStore.turvallisuuskoulutusSuoritettu" type="checkbox" id="turvallisuuskuittaus"/>
+  <div class="safety-checkbox">
+    <input v-model="scoresStore.safetyTrainingCompleted" type="checkbox" id="safety-acknowledgment"/>
     <label for="checkbox">Kaikki ampumakokeen osallistujat tuntevat yllä olevat turvalliset aseen käsittelyn säännöt.</label>
   </div>
 
-  <div class="actions jatka">
-    <button class="action" :disabled="!pisteetStore.turvallisuuskoulutusSuoritettu" @click="pisteetStore.turvallisuuskoulutusSuoritettu = true; $router.push('/')">Jatka</button>
+  <div class="actions continue">
+    <button class="action" :disabled="!scoresStore.safetyTrainingCompleted" @click="scoresStore.safetyTrainingCompleted = true; $router.push('/')">Jatka</button>
   </div>
     </div>
   </main>
@@ -47,20 +45,20 @@ const pisteetStore = usePisteetStore()
 
 <style>
 
-main.turvallisuus {
+main.safety {
   background-image: linear-gradient(to bottom, rgba(233, 233, 233, .3), rgba(233, 233, 233, 2)), url("../assets/9mm.jpg");
   padding: 8rem 0 0 0;
 
 }
 
-.sisalto {
+.content {
   background-color: rgba(233,233,233,.8);
   padding: 1rem;
 }
 
 
 .about h1,h2 {
-  color: var(--vari1);
+  color: var(--color1);
   font-weight: bold;
   padding-top: 1rem;
 }
@@ -69,7 +67,7 @@ main.turvallisuus {
   padding: 1rem;
 }
 
-.kasittelysaannot li {
+.handling-rules li {
   margin-top: 1.2rem;
 }
 
@@ -77,11 +75,11 @@ a {
   color: var(--color-text);
 }
 
-.actions.jatka {
+.actions.continue {
   flex-direction: row-reverse;
 }
 
-.turvallisuuscheckbox {
+.safety-checkbox {
   padding: 1rem 0 1rem 0;
 
 

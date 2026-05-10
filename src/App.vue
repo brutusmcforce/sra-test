@@ -29,8 +29,8 @@ nav {
   text-align: center;
 }
 
-nav.sivuvalikko {
-  /* Kaikki yläpalkin otsikot samalle riville */
+nav.nav-menu {
+  /* Keep all top-bar headings on one line */
   font-size: 96%;
   width: 100%;
   text-align: center;
@@ -39,7 +39,7 @@ nav.sivuvalikko {
   background-size: cover;
 
   & a {
-    color: var(--vari2);
+    color: var(--color2);
   }
 
   & span.icon {

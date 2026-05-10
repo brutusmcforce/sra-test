@@ -21,7 +21,7 @@ import {beforeAll} from "vitest";
 // require('./commands')
 
 
-// Esivaatimuksena ampujien syöttäminen
+// Prerequisite: entering shooters
 // beforeEach(() => {
 //
 // })

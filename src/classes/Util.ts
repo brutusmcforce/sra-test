@@ -1,55 +1,55 @@
 import pako from 'pako'
 
-export const kirjaaHylkays = (pisteetStore: any, ampuja: string) => {
-    const peruste = window.prompt("Ampujan " + ampuja + " hylkäämisen syy?", "") as string
-    if (peruste != null && peruste !== "") {
-        pisteetStore.kirjaaHylkays(ampuja, peruste)
+export const recordDisqualification = (scoresStore: any, shooter: string) => {
+    const reason = window.prompt("Ampujan " + shooter + " hylkäämisen syy?", "") as string
+    if (reason != null && reason !== "") {
+        scoresStore.recordDisqualification(shooter, reason)
     }
 }
 
-export const peruHylkays = (pisteetStore: any, ampuja: string) => {
-    pisteetStore.peruHylkays(ampuja)
+export const cancelDisqualification = (scoresStore: any, shooter: string) => {
+    scoresStore.cancelDisqualification(shooter)
 }
 
-export const jakoLinkki = (jakoData: Korttidata): string => {
-    return "./tulos?d=" + koodaaTiedot(jakoData)
+export const shareLink = (data: CardData): string => {
+    return "./result?d=" + encodeData(data)
 }
 
 /**
- * Yksittäisen ampujan tuloksen koodaus JSON-oliotksi, joka välitetään pakattuna ja base64-koodattuna
- * tuloskorttille.
+ * Encodes a single shooter's result as a JSON object, which is passed (compressed and base64-encoded)
+ * to the score card.
  */
-export const jakoData = (ampuja: string, pisteetStore: any): Korttidata => {
+export const shareData = (shooter: string, scoresStore: any): CardData => {
     return {
-        "n": ampuja,
-        "dl": pisteetStore.getAikaJaPaikka(),
+        "n": shooter,
+        "dl": scoresStore.getDateAndPlace(),
         "r": [
-            pisteetStore.getAmpujaRastiLuokkaOsumat(ampuja, 0),
-            pisteetStore.getAmpujaRastiLuokkaOsumat(ampuja, 1),
-            pisteetStore.getAmpujaRastiLuokkaOsumat(ampuja, 2),
-            pisteetStore.getAmpujaRastiLuokkaOsumat(ampuja, 3),
-            pisteetStore.getAmpujaRastiLuokkaOsumat(ampuja, 4)
+            scoresStore.getShooterStageClassHits(shooter, 0),
+            scoresStore.getShooterStageClassHits(shooter, 1),
+            scoresStore.getShooterStageClassHits(shooter, 2),
+            scoresStore.getShooterStageClassHits(shooter, 3),
+            scoresStore.getShooterStageClassHits(shooter, 4)
         ],
         "a": [
-            pisteetStore.getAmpujanRastiAika(ampuja, 0),
-            pisteetStore.getAmpujanRastiAika(ampuja, 1),
-            pisteetStore.getAmpujanRastiAika(ampuja, 2),
-            pisteetStore.getAmpujanRastiAika(ampuja, 3),
-            pisteetStore.getAmpujanRastiAika(ampuja, 4)
+            scoresStore.getShooterStageTime(shooter, 0),
+            scoresStore.getShooterStageTime(shooter, 1),
+            scoresStore.getShooterStageTime(shooter, 2),
+            scoresStore.getShooterStageTime(shooter, 3),
+            scoresStore.getShooterStageTime(shooter, 4)
         ],
-        "h": pisteetStore.getHylkaysperuste(ampuja),
-        "tn": pisteetStore.getTuomariNimi(),
-        "tno": pisteetStore.getTuomariNumero()
-    } as Korttidata
+        "h": scoresStore.getDisqualificationReason(shooter),
+        "tn": scoresStore.getRefereeName(),
+        "tno": scoresStore.getRefereeNumber()
+    } as CardData
 }
 
-export function koodaaTiedot(tulostiedot: Korttidata): string {
-    const json = JSON.stringify(tulostiedot)
+export function encodeData(cardData: CardData): string {
+    const json = JSON.stringify(cardData)
     const compressed = pako.deflate(json)
     const base64 = window.btoa(
         String.fromCharCode(...compressed)
     )
-    // URL-turvallinen base64
+    // URL-safe base64
     return base64
         .replace(/\+/g, '-')
         .replace(/\//g, '_')

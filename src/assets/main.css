@@ -6,10 +6,10 @@
 
 
 html {
-  --vari1: #546552;
-  --vari2: #e7d7a6;
-  --vari3: #f5d28d;
-  --vari4: #e0cdb1;
+  --color1: #546552;
+  --color2: #e7d7a6;
+  --color3: #f5d28d;
+  --color4: #e0cdb1;
 }
 
 #app {
@@ -89,7 +89,7 @@ a, .green {
 }
 
 
-.nimikortti {
+.name-card {
   display: flex;
   align-items: end;
   & h1 {
@@ -97,7 +97,7 @@ a, .green {
   }
 }
 
-.tuloskortti {
+.score-card {
 
 width: 98%;
 
@@ -119,7 +119,7 @@ width: 98%;
       background-color: #e7e7e7;
     }
 
-  & tr.yhteensa {
+  & tr.total {
     & td {
       font-weight: bold;
     }
@@ -145,15 +145,15 @@ width: 98%;
 }
 
 
-.tuloskorttiotsikko1 {
+.score-cardotsikko1 {
   text-align: center;
   font-variant: all-petite-caps;
   font-weight: bold;
-  background-color: var(--vari1);
-  color: var(--vari2);
+  background-color: var(--color1);
+  color: var(--color2);
   margin: .2rem;
   & a {
-    color: var(--vari2);
+    color: var(--color2);
     font-weight: bold;
     &:hover {
       text-decoration: none;
@@ -163,7 +163,7 @@ width: 98%;
   }
 }
 
-.tuloskorttiotsikko2 {
+.score-cardotsikko2 {
   text-align: center;
   font-variant: all-petite-caps;
   font-weight: bold;
@@ -172,7 +172,7 @@ width: 98%;
   margin: .2rem;
 }
 
-.qrcodecontainer {
+.qr-code-container {
   text-align: center;
   .actions {
     justify-content: center;
@@ -184,12 +184,12 @@ width: 98%;
   text-align: center;
 }
 
-.paivajapaikka {
+.date-and-place {
   text-align: right;
   width: 97%;
 }
 
-.tuomarileima {
+.referee-stamp {
   color: rgba(85, 2, 85, 0.94);
   border: 3px solid rgba(85, 2, 85, 0.94);
   border-radius: 5px;
@@ -202,7 +202,7 @@ width: 98%;
   transform: rotate(9deg);
 }
 
-.eitallenneta {
+.not-stored {
   text-align: center;
 }
 
@@ -215,7 +215,7 @@ width: 98%;
   }
 }
 
-.virheellinenlinkki {
+.invalid-link {
   border: 1px solid white;
   border-radius: 5px;
   padding: .9rem;
@@ -223,18 +223,18 @@ width: 98%;
   background-color: white;
 }
 
-.kurssitiedot {
+.course-info {
   & th {
     font-size: 100%;
   }
 }
 
-.dqsyy {
+.dq-reason {
   margin: 1rem;
   color: darkred;
 }
 
-.tuloskorttilinkki {
+.score-cardlinkki {
   text-align: right;
   & a {
     color: black;

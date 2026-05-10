@@ -124,7 +124,7 @@ const version = __APP_VERSION__
 <style>
 
 .about h1,h2 {
-  color: var(--vari1);
+  color: var(--color1);
   font-weight: bold;
   padding-top: 1rem;
 }

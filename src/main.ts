@@ -15,7 +15,7 @@ const app = createApp(App)
 
 app.use(pinia)
 
-// Uudelleenohjauksien käsittely (ks. 404.html)
+// Redirect handling (see 404.html)
 const redirectPath = sessionStorage.getItem('redirectPath');
 if (redirectPath) {
   router.replace(redirectPath).finally(() => {

@@ -1,37 +1,37 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PisteLaskuri from '../views/LaskuriView.vue'
-import Ampuja from '../views/Ampuja.vue'
-import Tuloskortti from '../views/Tuloskortti.vue'
-import TulosLista from "@/components/TulosLista.vue";
-import OletusLayout from "@/layouts/OletusLayout.vue";
-import KokoSivuLayout from "@/layouts/KokoSivuLayout.vue";
+import ScoringView from '../views/ScoringView.vue'
+import ShooterView from '../views/ShooterView.vue'
+import ScoreCard from '../views/ScoreCard.vue'
+import ResultList from "@/components/ResultList.vue";
+import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import FullPageLayout from "@/layouts/FullPageLayout.vue";
 
 const router = createRouter({
   history: createWebHistory('/sra-koe/'),
   routes: [
     {
       path: '/',
-      component: OletusLayout,
+      component: DefaultLayout,
       children: [
         {
           path: '/',
-          name: 'tuloslista',
-          component: TulosLista
+          name: 'result-list',
+          component: ResultList
         },
         {
-          path: '/ampuja',
-          name: 'ampujadatalla',
-          component: Ampuja
+          path: '/shooter',
+          name: 'shooter-with-data',
+          component: ShooterView
         },
         {
-          path: '/ampuja/:ampuja',
-          name: 'ampuja',
-          component: Ampuja
+          path: '/shooter/:shooter',
+          name: 'shooter',
+          component: ShooterView
         },
         {
-          path: '/kirjaus/:rasti/:ampuja',
-          name: 'kirjaus',
-          component: PisteLaskuri
+          path: '/entry/:stage/:shooter',
+          name: 'entry',
+          component: ScoringView
         },
         {
           path: '/about',
@@ -42,17 +42,16 @@ const router = createRouter({
           component: () => import('../views/AboutView.vue')
         },
         {
-          path: '/turvallisuus',
-          name: 'turvallisuus',
-          component: () => import('../views/TurvallisuusView.vue')
+          path: '/safety',
+          name: 'safety',
+          component: () => import('../views/SafetyView.vue')
         },
         {
-          path: '/saannot',
-          name: 'saannot',
-          component: () => import('../views/Saannot.vue')
+          path: '/rules',
+          name: 'rules',
+          component: () => import('../views/RulesView.vue')
         },
         {
-          // path: "*",
           path: "/:catchAll(.*)",
           name: "NotFound",
           component: () => import('../views/AboutView.vue'),
@@ -64,12 +63,12 @@ const router = createRouter({
     },
 
     {
-      path: '/tulos',
-      component: KokoSivuLayout,
+      path: '/result',
+      component: FullPageLayout,
       children: [
         {
           path: '',
-          component: Tuloskortti
+          component: ScoreCard
         }
       ]
     }
