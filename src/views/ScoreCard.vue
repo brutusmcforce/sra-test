@@ -286,3 +286,97 @@ onMounted(() => {
 <script lang="ts">
 const baseUrl = import.meta.env.BASE_URL
 </script>
+
+<style scoped>
+.invalid-link {
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 0.9rem;
+  margin: 2rem;
+  background-color: white;
+}
+
+.score-card-title-1,
+.score-card-title-2 {
+  text-align: center;
+  font-variant: all-petite-caps;
+  font-weight: bold;
+  margin: 0.2rem;
+}
+
+.score-card-title-1 {
+  background-color: var(--color1);
+  color: var(--color2);
+
+  & a {
+    color: var(--color2);
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: none;
+      background-color: transparent;
+    }
+  }
+}
+
+.score-card-title-2 {
+  background-color: #ccc;
+  color: #444;
+}
+
+.date-and-place {
+  text-align: right;
+  width: 97%;
+}
+
+.score-card {
+  width: 98%;
+
+  & thead th {
+    min-width: 4rem;
+    max-width: 12rem;
+  }
+
+  & td { text-align: right; }
+
+  & tr:nth-child(odd) { background-color: #f5f5f5; }
+  & tr:nth-child(even) { background-color: #e7e7e7; }
+
+  & tr.total td { font-weight: bold; }
+}
+
+.referee-stamp {
+  color: rgba(85, 2, 85, 0.94);
+  border: 3px solid rgba(85, 2, 85, 0.94);
+  border-radius: 5px;
+  font-family: monospace;
+  padding: 0.1rem;
+  margin: 0 1rem 0 auto;
+  max-width: 11rem;
+  text-align: center;
+  transform: rotate(9deg);
+}
+
+.qr-code-container {
+  text-align: center;
+
+  & .actions { justify-content: center; }
+}
+
+#qrcode {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.not-stored {
+  text-align: center;
+}
+
+.footer {
+  margin-top: 2rem;
+  text-align: center;
+  border-top: 1px solid #ccc;
+
+  & a { color: #444; }
+}
+</style>
