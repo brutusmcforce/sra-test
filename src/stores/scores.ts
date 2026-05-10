@@ -1,24 +1,19 @@
-import { defineStore } from 'pinia'
-import { StageStatus, SraShootingTest } from '@/classes/SraShootingTest'
+import { defineStore } from "pinia";
+import { StageStatus, SraShootingTest } from "@/classes/SraShootingTest";
 
-// Per-shooter map: stage -> hit class -> [target0, target1] count
-type ShooterScores = Record<string, number[][][]>
-// Per-shooter map: stage -> [series0, series1, series2] seconds
-type ShooterTimes = Record<string, number[][]>
+type ShooterScores = Record<string, number[][][]>;
+type ShooterTimes = Record<string, number[][]>;
 
-const STAGES = [0, 1, 2, 3, 4]
+const STAGES = [0, 1, 2, 3, 4];
 
 const orderIsSame = (a: string[], b: string[]) =>
-  a.length === b.length && a.every((el, idx) => el === b[idx])
+  a.length === b.length && a.every((el, idx) => el === b[idx]);
 
-const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0)
+const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0);
 
-// NOTE: persistence key kept as 'pisteet' so existing users' saved data continues to load.
-// State fields with snake_case names (referee_*, testEvent_*) are also persisted under
-// those keys; do not rename without a migration.
-export type ScoresStore = ReturnType<typeof useScoresStore>
+export type ScoresStore = ReturnType<typeof useScoresStore>;
 
-export const useScoresStore = defineStore('pisteet', {
+export const useScoresStore = defineStore("score", {
   state: () => ({
     safetyTrainingCompleted: false,
     scores: {} as ShooterScores,
@@ -28,74 +23,72 @@ export const useScoresStore = defineStore('pisteet', {
     birthDates: {} as Record<string, string>,
     courseNumbers: {} as Record<string, string>,
     clubs: {} as Record<string, string>,
-    order: '',
-    referee_name: '',
-    referee_sraid: '',
-    referee_phone: '',
-    testEvent_place: '',
-    testEvent_date: '',
+    order: "",
+    referee_name: "",
+    referee_sraid: "",
+    referee_phone: "",
+    testEvent_place: "",
+    testEvent_date: "",
   }),
   persist: true,
   actions: {
     addShooter(name: string) {
       this.scores[name] = Array.from({ length: 5 }, () =>
-        Array.from({ length: 6 }, () => [0, 0])
-      )
-      this.times[name] = Array.from({ length: 5 }, () => [0, 0, 0])
-      this.stage5Methods[name] = 'pist'
-      // A new shooter invalidates the prior safety-training acknowledgement.
-      this.safetyTrainingCompleted = false
+        Array.from({ length: 6 }, () => [0, 0]),
+      );
+      this.times[name] = Array.from({ length: 5 }, () => [0, 0, 0]);
+      this.stage5Methods[name] = "pist";
+
+      this.safetyTrainingCompleted = false;
     },
     removeShooter(shooter: string) {
-      delete this.scores[shooter]
-      delete this.times[shooter]
-      delete this.disqualifications[shooter]
-      delete this.stage5Methods[shooter]
-      delete this.birthDates[shooter]
-      delete this.courseNumbers[shooter]
-      delete this.clubs[shooter]
+      delete this.scores[shooter];
+      delete this.times[shooter];
+      delete this.disqualifications[shooter];
+      delete this.stage5Methods[shooter];
+      delete this.birthDates[shooter];
+      delete this.courseNumbers[shooter];
+      delete this.clubs[shooter];
+
       if (Object.keys(this.times).length === 0) {
-        this.safetyTrainingCompleted = false
+        this.safetyTrainingCompleted = false;
       }
     },
     setBirthDate(shooter: string, date: string) {
-      this.birthDates[shooter] = date
+      this.birthDates[shooter] = date;
     },
     setCourseNumber(shooter: string, courseNumber: string) {
-      this.courseNumbers[shooter] = courseNumber
+      this.courseNumbers[shooter] = courseNumber;
     },
     setClub(shooter: string, club: string) {
-      this.clubs[shooter] = club
+      this.clubs[shooter] = club;
     },
 
     getShooterStageTimes(shooter: string, stage: number): number[] {
-      return this.times[shooter][stage]
+      return this.times[shooter][stage];
     },
     getShooterStageTime(shooter: string, stage: number): number {
-      return sum(this.times[shooter][stage].map(Number))
+      return sum(this.times[shooter][stage].map(Number));
     },
-    /** Hit count per hit-class index (A, C, D, miss, penalty) for a stage. */
     getShooterStageClassHits(shooter: string, stage: number): number[] {
-      return this.scores[shooter][stage].map((row) => sum(row))
+      return this.scores[shooter][stage].map((row) => sum(row));
     },
-    /** Points per hit-class index, computed from class hits. */
     getShooterStagePoints(shooter: string, stage: number): number[] {
       return this.getShooterStageClassHits(shooter, stage).map(
-        (hits, classIdx) => classPoints(classIdx, hits)
-      )
+        (hits, classIdx) => classPoints(classIdx, hits),
+      );
     },
     getShooterStagePointSum(shooter: string, stage: number): number {
-      return Math.max(0, sum(this.getShooterStagePoints(shooter, stage)))
+      return Math.max(0, sum(this.getShooterStagePoints(shooter, stage)));
     },
-    /** Sum of points from completed stages only. */
     getShooterPointSum(shooter: string): number {
       return sum(
         STAGES.map((stage) =>
           this.getStageStatus(shooter, stage) === StageStatus.Completed
             ? this.getShooterStagePointSum(shooter, stage)
-            : 0
-        )
-      )
+            : 0,
+        ),
+      );
     },
     /** Sum of times from completed stages only. */
     getShooterTimeSum(shooter: string): number {
@@ -103,115 +96,117 @@ export const useScoresStore = defineStore('pisteet', {
         STAGES.map((stage) =>
           this.getStageStatus(shooter, stage) === StageStatus.Completed
             ? sum(this.times[shooter][stage])
-            : 0
-        )
-      )
+            : 0,
+        ),
+      );
     },
     getShooterHitFactor(shooter: string): number {
-      return this.getShooterPointSum(shooter) / this.getShooterTimeSum(shooter)
+      return this.getShooterPointSum(shooter) / this.getShooterTimeSum(shooter);
     },
     getAllShot(shooter: string): boolean {
       return STAGES.every(
-        (stage) => this.getStageStatus(shooter, stage) === StageStatus.Completed
-      )
+        (stage) =>
+          this.getStageStatus(shooter, stage) === StageStatus.Completed,
+      );
     },
     getStageStatus(shooter: string, stage: number): StageStatus {
-      const scoredHits = sum(this.getShooterStageClassHits(shooter, stage))
+      const scoredHits = sum(this.getShooterStageClassHits(shooter, stage));
       const requiredShots =
-        this.stage5Methods[shooter] === 'pist'
+        this.stage5Methods[shooter] === "pist"
           ? sum(SraShootingTest.shotCountsWithPistol[stage])
-          : sum(SraShootingTest.shotCountsWithRifle[stage])
+          : sum(SraShootingTest.shotCountsWithRifle[stage]);
 
       // Stages 1 and 2 (indexes 0/1) record three series times; later stages record one.
       const timesRecorded =
         stage <= 1
           ? this.times[shooter][stage].slice(0, 3).every((t) => t > 0)
-          : this.times[shooter][stage][0] > 0
+          : this.times[shooter][stage][0] > 0;
 
       if (
         (scoredHits > 0 && scoredHits < requiredShots) ||
         (scoredHits > 0 && !timesRecorded) ||
         (scoredHits === 0 && timesRecorded)
       ) {
-        return StageStatus.InProgress
+        return StageStatus.InProgress;
       }
       if (scoredHits >= requiredShots && timesRecorded) {
-        return StageStatus.Completed
+        return StageStatus.Completed;
       }
-      return StageStatus.NotStarted
+      return StageStatus.NotStarted;
     },
     getAllStagesCompleted(shooter: string): boolean {
-      return this.getAllShot(shooter)
+      return this.getAllShot(shooter);
     },
-
-    /**
-     * Returns the manually recorded disqualification reason, or null if not disqualified.
-     * Auto-disqualification (hit factor below threshold) is detected separately via
-     * `isAutoDisqualified` so its reason can be formatted at the UI layer (with i18n).
-     */
     getDisqualificationReason(shooter: string): string | null {
-      return this.disqualifications[shooter] ?? null
+      return this.disqualifications[shooter] ?? null;
     },
     isAutoDisqualified(shooter: string): boolean {
       return (
         this.disqualifications[shooter] == null &&
         this.getAllShot(shooter) &&
         this.getShooterHitFactor(shooter) < SraShootingTest.requiredHitFactor
-      )
+      );
     },
     isDisqualified(shooter: string): boolean {
       return (
-        this.disqualifications[shooter] != null || this.isAutoDisqualified(shooter)
-      )
+        this.disqualifications[shooter] != null ||
+        this.isAutoDisqualified(shooter)
+      );
     },
     recordDisqualification(shooter: string, reason: string) {
-      this.disqualifications[shooter] = reason
+      this.disqualifications[shooter] = reason;
     },
     cancelDisqualification(shooter: string) {
-      delete this.disqualifications[shooter]
+      delete this.disqualifications[shooter];
     },
 
     getDateAndPlace(): string {
-      return [this.testEvent_date, this.testEvent_place].filter(Boolean).join(' ')
+      return [this.testEvent_date, this.testEvent_place]
+        .filter(Boolean)
+        .join(" ");
     },
     getRefereeName(): string {
-      return this.referee_name ?? ''
+      return this.referee_name ?? "";
     },
     getRefereeNumber(): string {
-      return this.referee_sraid ?? ''
+      return this.referee_sraid ?? "";
     },
 
     reset() {
-      this.scores = {}
-      this.times = {}
-      this.disqualifications = {}
-      this.stage5Methods = {}
-      this.safetyTrainingCompleted = false
-      this.order = 'rotating'
-      this.testEvent_place = ''
-      this.testEvent_date = ''
-      this.birthDates = {}
-      this.courseNumbers = {}
-      this.clubs = {}
+      this.scores = {};
+      this.times = {};
+      this.disqualifications = {};
+      this.stage5Methods = {};
+      this.safetyTrainingCompleted = false;
+      this.order = "rotating";
+      this.testEvent_place = "";
+      this.testEvent_date = "";
+      this.birthDates = {};
+      this.courseNumbers = {};
+      this.clubs = {};
     },
     randomizeOrder() {
-      const current = Object.keys(this.scores)
-      let next = current
+      const current = Object.keys(this.scores);
+      let next = current;
       do {
-        next = [...current].sort(() => Math.random() - 0.5)
-      } while (orderIsSame(current, next))
-      this.scores = Object.fromEntries(next.map((k) => [k, this.scores[k]]))
+        next = [...current].sort(() => Math.random() - 0.5);
+      } while (orderIsSame(current, next));
+      this.scores = Object.fromEntries(next.map((k) => [k, this.scores[k]]));
     },
   },
-})
+});
 
 function classPoints(classIdx: number, hits: number): number {
   switch (classIdx) {
-    case 0: return 5 * hits  // A
-    case 1: return 3 * hits  // C
-    case 2: return hits      // D
-    case 3:                  // miss
-    case 4: return -10 * hits // penalty
+    case 0:
+      return 5 * hits; // A
+    case 1:
+      return 3 * hits; // C
+    case 2:
+      return hits; // D
+    case 3: // miss
+    case 4:
+      return -10 * hits; // penalty
   }
-  return 0
+  return 0;
 }

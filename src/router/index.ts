@@ -1,79 +1,74 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import ScoringView from '../views/ScoringView.vue'
-import ShooterView from '../views/ShooterView.vue'
-import ScoreCard from '../views/ScoreCard.vue'
+import { createRouter, createWebHistory } from "vue-router";
+import ScoringView from "../views/ScoringView.vue";
+import ShooterView from "../views/ShooterView.vue";
+import ScoreCard from "../views/ScoreCard.vue";
 import ResultList from "@/components/ResultList.vue";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import FullPageLayout from "@/layouts/FullPageLayout.vue";
 
 const router = createRouter({
-  history: createWebHistory('/sra-koe/'),
+  history: createWebHistory("/sra-test/"),
   routes: [
     {
-      path: '/',
+      path: "/",
       component: DefaultLayout,
       children: [
         {
-          path: '/',
-          name: 'result-list',
-          component: ResultList
+          path: "/",
+          name: "result-list",
+          component: ResultList,
         },
         {
-          path: '/shooter',
-          name: 'shooter-with-data',
-          component: ShooterView
+          path: "/shooter",
+          name: "shooter-with-data",
+          component: ShooterView,
         },
         {
-          path: '/shooter/:shooter',
-          name: 'shooter',
-          component: ShooterView
+          path: "/shooter/:shooter",
+          name: "shooter",
+          component: ShooterView,
         },
         {
-          path: '/entry/:stage/:shooter',
-          name: 'entry',
-          component: ScoringView
+          path: "/entry/:stage/:shooter",
+          name: "entry",
+          component: ScoringView,
         },
         {
-          path: '/about',
-          name: 'about',
-          // route level code-splitting
-          // this generates a separate chunk (About.[hash].js) for this route
-          // which is lazy-loaded when the route is visited.
-          component: () => import('../views/AboutView.vue')
+          path: "/about",
+          name: "about",
+          component: () => import("../views/AboutView.vue"),
         },
         {
-          path: '/safety',
-          name: 'safety',
-          component: () => import('../views/SafetyView.vue')
+          path: "/safety",
+          name: "safety",
+          component: () => import("../views/SafetyView.vue"),
         },
         {
-          path: '/rules',
-          name: 'rules',
-          component: () => import('../views/RulesView.vue')
+          path: "/rules",
+          name: "rules",
+          component: () => import("../views/RulesView.vue"),
         },
         {
           path: "/:catchAll(.*)",
           name: "NotFound",
-          component: () => import('../views/AboutView.vue'),
+          component: () => import("../views/AboutView.vue"),
           meta: {
-            requiresAuth: false
-          }
-        }
-      ]
+            requiresAuth: false,
+          },
+        },
+      ],
     },
 
     {
-      path: '/result',
+      path: "/result",
       component: FullPageLayout,
       children: [
         {
-          path: '',
-          component: ScoreCard
-        }
-      ]
-    }
-
-
+          path: "",
+          component: ScoreCard,
+        },
+      ],
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -81,12 +76,12 @@ const router = createRouter({
     } else if (to.hash) {
       return {
         el: to.hash,
-        behavior: 'smooth',
+        behavior: "smooth",
       };
     } else {
       return { top: 0 };
     }
   },
-})
+});
 
-export default router
+export default router;

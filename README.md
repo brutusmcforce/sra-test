@@ -1,13 +1,13 @@
 # SRA ampumakokeen pisteytyssovellus
 
-Toimiva sovellus osoitteessa https://mpolla.github.io/sra-koe/
+Toimiva sovellus osoitteessa <https://mpolla.github.io/sra-koe/>
 
-Tämä on selainsovellus [SRA](https://resul.fi/sra/) (Sovellettu Reserviläisammunta) toiminnallisen ampumalajin 
+Tämä on selainsovellus [SRA](https://resul.fi/sra/) (Sovellettu Reserviläisammunta) toiminnallisen ampumalajin
 ampumakoneen pisteiden laskentaan.
 
 Sovellus tallentaa tiedot ainoastaan paikalliseen päätelaitteeseen. Tietoja ei tallennneta tai jaeta verkkopalvelimilla.
 
-Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäjään mpo@iki.fi
+Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäjään <mpo@iki.fi>
 
 ## Kehittäminen
 

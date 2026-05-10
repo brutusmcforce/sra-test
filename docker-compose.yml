@@ -1,5 +1,4 @@
-# Simuloi kehityskäytössä GH pages -asennusta
-# https://mpolla.github.io/sra-koe/
+# https://brutusmcforce.github.io/sra-test/
 services:
   proxy:
     image: nginx:alpine
