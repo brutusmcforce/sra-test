@@ -21,7 +21,7 @@ export default {
     intro:
       "Välkommen till SRA-skjuttestet. Skriv in deltagarnas namn nedan. Information som matas in i applikationen sparas endast i den lokala enhetens minne. Inga uppgifter lagras eller delas via nätet. Du kan ladda ner PDF-protokoll efter att resultaten har registrerats.",
     shooters: "Skyttar",
-    title: "Resultatlista",
+    title: "Resultat",
     columnName: "Namn",
     columnStages: "Stationer",
     columnResultAndHf: "Resultat och HF",
