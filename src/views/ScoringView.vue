@@ -855,8 +855,8 @@ nav.stages {
   & ul li {
     display: flex;
     & a {
-      width: 6rem;
-      padding: 0.2rem 0.4rem 0 0.9rem;
+      width: 3.7rem;
+      padding: 0.2rem 0.4rem 0 1rem;
     }
   }
   & ul li.done a {
@@ -945,7 +945,7 @@ nav.stages {
     z-index: 5;
   }
   & ul li:first-child a {
-    width: 5.6rem;
+    width: 3.9rem;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }

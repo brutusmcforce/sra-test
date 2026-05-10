@@ -1,30 +1,32 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useScoresStore } from '@/stores/scores'
-import { StageStatus } from '@/classes/SraShootingTest'
+import { useI18n } from "vue-i18n";
+import { useScoresStore } from "@/stores/scores";
+import { StageStatus } from "@/classes/SraShootingTest";
 
-const props = defineProps<{ shooter: string; currentStage: number }>()
-const scoresStore = useScoresStore()
-const { t } = useI18n()
+const props = defineProps<{ shooter: string; currentStage: number }>();
+const scoresStore = useScoresStore();
+const { t } = useI18n();
 
-const stageStatusClass = (s: number): 'active' | 'done' | 'todo' => {
-  if (s === props.currentStage) return 'active'
+const stageStatusClass = (s: number): "active" | "done" | "todo" => {
+  if (s === props.currentStage) return "active";
   const activeShooters = Object.keys(scoresStore.scores).filter(
-    (sh) => !(sh in scoresStore.disqualifications)
-  )
-  if (activeShooters.length === 0) return 'todo'
+    (sh) => !(sh in scoresStore.disqualifications),
+  );
+  if (activeShooters.length === 0) return "todo";
   const allDone = activeShooters.every(
-    (sh) => scoresStore.getStageStatus(sh, s) === StageStatus.Completed
-  )
-  return allDone ? 'done' : 'todo'
-}
+    (sh) => scoresStore.getStageStatus(sh, s) === StageStatus.Completed,
+  );
+  return allDone ? "done" : "todo";
+};
 </script>
 
 <template>
   <nav class="stages">
     <ul>
       <li v-for="s in [0, 1, 2, 3, 4]" :key="s" :class="stageStatusClass(s)">
-        <a :href="`../../entry/${s}/${shooter}`">{{ t('scoring.stage') }} {{ s + 1 }}</a>
+        <a :href="`../../entry/${s}/${shooter}`"
+          >{{ t("scoring.stage") }} {{ s + 1 }}</a
+        >
       </li>
     </ul>
   </nav>
@@ -62,7 +64,7 @@ nav.stages li a {
 }
 nav.stages li a::before,
 nav.stages li a::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   border-top: 15px solid transparent;
@@ -80,28 +82,47 @@ nav.stages li a::after {
 }
 
 /* Status colors */
-nav.stages li.done a { background-color: #777; color: var(--color2); }
-nav.stages li.done a::after { border-left-color: #777; }
+nav.stages li.done a {
+  background-color: #777;
+  color: var(--color2);
+}
+nav.stages li.done a::after {
+  border-left-color: #777;
+}
 
-nav.stages li.todo a { background-color: var(--color2); color: var(--color1); }
-nav.stages li.todo a::after { border-left-color: var(--color2); }
+nav.stages li.todo a {
+  background-color: var(--color2);
+  color: var(--color1);
+}
+nav.stages li.todo a::after {
+  border-left-color: var(--color2);
+}
 
-nav.stages li.active a { background-color: white; color: var(--color1); }
-nav.stages li.active a::after { border-left-color: white; }
+nav.stages li.active a {
+  background-color: white;
+  color: var(--color1);
+}
+nav.stages li.active a::after {
+  border-left-color: white;
+}
 
 /* First/last segment rounded corners */
 nav.stages li:first-child a {
-  width: 5.6rem;
+  width: 3.9rem;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
 }
-nav.stages li:first-child a::before { display: none; }
+nav.stages li:first-child a::before {
+  display: none;
+}
 nav.stages li:last-child a {
   padding-right: 10px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
 }
-nav.stages li:last-child a::after { display: none; }
+nav.stages li:last-child a::after {
+  display: none;
+}
 
 nav.stages li a:hover {
   background: rgba(200, 200, 200, 0.5);

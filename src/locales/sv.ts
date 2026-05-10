@@ -8,7 +8,7 @@ export default {
     en: "English",
   },
   nav: {
-    resultList: "Resultatlista",
+    resultList: "Resultat",
     rules: "Regler",
     about: "Om",
   },
@@ -73,7 +73,7 @@ export default {
       "Skjuts. Nästa skytt {shooter}, sista skjutomgången i testet.",
     shootingNextWithUpcoming:
       "Skjuts. Nästa skytt {shooter}, {next} förbereder sig.",
-    stage: "Station",
+    stage: "Stn",
     stageHeader: "Station {stage} / {shooter}",
     method: "Vapen:",
     pistol: "Pistol",
