@@ -1,6 +1,17 @@
-import {PDFDocument, rgb} from "pdf-lib";
-import download from "downloadjs";
-import {SraShootingTest} from "@/classes/SraShootingTest";
+import { PDFDocument, rgb } from 'pdf-lib'
+import { SraShootingTest } from '@/classes/SraShootingTest'
+
+function downloadBytes(bytes: Uint8Array, filename: string, mimeType: string) {
+  const blob = new Blob([bytes as BlobPart], { type: mimeType })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
+}
 
 /**
  * SRA shooting test PDF report: ResUL's template, into which the test results are added.
@@ -76,8 +87,8 @@ export class PdfReport {
             pages[0].drawText(scoresStore.clubs[shooter], {x: 125, y: 680, size: 12})
         }
 
-        for (let stage in SraShootingTest.stages) {
-            for (let row in [0,1,2,3,4,5]) {
+        for (const stage in SraShootingTest.stages) {
+            for (const row in [0,1,2,3,4,5]) {
                 // Target 1
                 pages[0].drawText(this.formatNumber(scoresStore.scores[shooter][stage][row][0]), {x: T1_X, y: STAGE_Y_OFFSET[stage] - Number(row)*ROW_H, size: 10})
                 // Target 2
@@ -107,7 +118,7 @@ export class PdfReport {
         pages[0].drawText(this.formatHitFactorPdf(scoresStore.getShooterHitFactor(shooter as string)), {x: 552, y: 137, size: 10})
 
         // X Passed
-        let hf = scoresStore.getShooterHitFactor(shooter as string)
+        const hf = scoresStore.getShooterHitFactor(shooter as string)
         if (scoresStore.disqualifications[shooter] == undefined  && (scoresStore.getAllShot(shooter) && hf >= SraShootingTest.requiredHitFactor)) {
             pages[0].drawText('X', {x: 336, y: 83, size: 18})
         }
@@ -129,6 +140,8 @@ export class PdfReport {
         pages[0].drawText(this.pdfRefereeInfo(scoresStore), {x: 312, y: 33, size: 10})
 
         const pdfBytes = await pdfDoc.save()
-        download(pdfBytes, "sra-ampumakoe-" + (new Date()).toISOString().substring(0,10) + "-" +shooter.replace(" ", "-")+ ".pdf", "application/pdf");
+        const date = new Date().toISOString().substring(0, 10)
+        const safeName = shooter.replace(/\s+/g, '-')
+        downloadBytes(pdfBytes, `sra-ampumakoe-${date}-${safeName}.pdf`, 'application/pdf')
     }
 }

@@ -1,4 +1,4 @@
-import pako from 'pako'
+import * as pako from 'pako'
 
 /**
  * Prompts the user for a disqualification reason. The promptMessage parameter

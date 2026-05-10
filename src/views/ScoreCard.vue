@@ -5,7 +5,7 @@ import {SraShootingTest} from "@/classes/SraShootingTest";
 import { UserSquare, ShareAndroid, Copy  } from '@iconoir/vue'
 import { useI18n } from 'vue-i18n'
 
-import pako from 'pako';
+import * as pako from 'pako'
 
 import QRCode from 'qrcode'
 
@@ -44,9 +44,9 @@ onMounted(async () => {
 })
 
 
-const base64Data = route.query.d as string | undefined
+const base64Data = (route.query.d as string | undefined) ?? null
 
-const data : CardData | null = assembleData(base64Data)
+const data: CardData | null = assembleData(base64Data)
 
 const qrCodeUrl = window.location.href
 
@@ -134,12 +134,10 @@ function decode<T = unknown>(encoded: string): CardData {
   return JSON.parse(json as string) as CardData
 }
 
-function points(hits : Array<number>): number {
+function points(hits: number[]): number {
   // Don't compute points if no hits have been recorded for this stage
-  if (hits.filter(a => a === 0).length == 6) {
-    return ""
-  }
-  return Math.max(0, 5*hits[0] + 3*hits[1] + hits[2] - 10*hits[3] -10*hits[4])
+  if (hits.every((h) => h === 0)) return 0
+  return Math.max(0, 5 * hits[0] + 3 * hits[1] + hits[2] - 10 * hits[3] - 10 * hits[4])
 }
 
 const copyLink = async () => {
@@ -228,10 +226,10 @@ onMounted(() => {
         </tr>
         <tr class="total">
           <th>{{ t('scoreCard.total') }}</th>
-          <td>{{ formatHits(data.r[0].map((_, colIndex) => data.r.reduce((sum, row) => sum + (row[colIndex] ?? 0), 0))) }}</td>
-          <td>{{ points(data.r[0].map((_, colIndex) => data.r.reduce((sum, row) => sum + (row[colIndex] ?? 0), 0))) }}</td>
-          <td>{{ formatTime(data.a.reduce((sum, val) => sum + val, 0)) }}</td>
-          <td>{{ formatHF(hitFactor(data)) }}</td>
+          <td>{{ formatHits(data!.r[0].map((_, colIndex) => data!.r.reduce((sum, row) => sum + (row[colIndex] ?? 0), 0))) }}</td>
+          <td>{{ points(data!.r[0].map((_, colIndex) => data!.r.reduce((sum, row) => sum + (row[colIndex] ?? 0), 0))) }}</td>
+          <td>{{ formatTime(data!.a.reduce((sum, val) => sum + val, 0)) }}</td>
+          <td>{{ formatHF(hitFactor(data!)) }}</td>
         </tr>
         <tr>
           <th colspan="3">{{ t('scoreCard.resultLabel') }}</th><td colspan="2">
