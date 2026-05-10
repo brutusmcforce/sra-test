@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import {onMounted, ref } from 'vue'
+import {computed, onMounted, ref } from 'vue'
 import {useRoute} from 'vue-router'
 import {SraShootingTest} from "@/classes/SraShootingTest";
 import { UserSquare, ShareAndroid, Copy  } from '@iconoir/vue'
+import { useI18n } from 'vue-i18n'
 
 import pako from 'pako';
 
 import QRCode from 'qrcode'
 
 const route = useRoute()
+const { t } = useI18n()
 
 const qrCanvas = ref<HTMLCanvasElement | null>(null)
 
@@ -24,7 +26,7 @@ function assembleData(encoded: string | null): CardData | null {
   try {
     return decode(encoded) as CardData
   } catch (err) {
-    console.error('Tulostietojen tulkitseminen epäonnistui - onko linkki kopioitu virheellisesti?', err)
+    console.error(t('scoreCard.parseFailed'), err)
     return null
   }
 
@@ -62,17 +64,45 @@ const formatHF = (hf: number) : string => (!isNaN(hf) && hf != Infinity ) ? hf.t
 
 const formatTime = (time: number) : string => time > 0 ? time.toFixed(2) + " s" : ""
 
-const formatResult = (data: CardData) => {
-  if (data.h != null) {
-    return "HYLÄTTY"
+/** Returns a stable status key: 'failed', 'in-progress', or 'passed', or null if undeterminable. */
+const resultStatus = (data: CardData): 'failed' | 'in-progress' | 'passed' | null => {
+  if (effectiveDqReason.value != null) {
+    return 'failed'
   }
   if (!testComplete(data)) {
-    return "KESKEN"
+    return 'in-progress'
   }
   if (hitFactor(data) >= SraShootingTest.requiredHitFactor) {
-    return "HYVÄKSYTTY"
+    return 'passed'
+  }
+  return null
+}
+
+const resultText = (data: CardData) => {
+  const status = resultStatus(data)
+  switch (status) {
+    case 'failed': return t('result.failed')
+    case 'in-progress': return t('result.inProgress')
+    case 'passed': return t('result.passed')
+    default: return ''
   }
 }
+
+/** Auto-DQ check based on data: all stages have time and >=40 hits but HF < required. */
+const isAutoDq = (data: CardData): boolean => {
+  if (data.h != null && data.h !== '') return false
+  if (data.a.find(time => time == 0) != null) return false
+  const totalHits = data.r[0].map((_, colIndex) => data.r.reduce((sum, row) => sum + (row[colIndex] ?? 0), 0)).reduce((acc, n) => acc + n, 0)
+  if (totalHits < 40) return false
+  return hitFactor(data) < SraShootingTest.requiredHitFactor
+}
+
+const effectiveDqReason = computed(() => {
+  if (data == null) return null
+  if (data.h != null && data.h !== '') return data.h
+  if (isAutoDq(data)) return t('shooter.autoDqReason', { factor: SraShootingTest.requiredHitFactor })
+  return null
+})
 
 const testComplete = (data: CardData): boolean => {
   // Disqualified: complete
@@ -116,14 +146,14 @@ const copyLink = async () => {
   try {
     await navigator.clipboard.writeText(window.location.href)
   } catch {
-    prompt('Kopioi tämä linkki:', window.location.href)
+    prompt(t('scoreCard.copyPrompt'), window.location.href)
   }
 }
 
 const sharePage = async () => {
   const shareData = {
     title: document.title,
-    text: 'SRA-ampumakokeen tuloskortti',
+    text: t('scoreCard.shareText'),
     url: window.location.href
   }
   if (navigator.share) {
@@ -140,7 +170,7 @@ const sharePage = async () => {
 const shareSupported = !!navigator.share
 
 onMounted(() => {
-  document.title = (data?.n != undefined ? data.n + " - ":  "") + 'SRA-ampumakokeen tuloskortti'
+  document.title = (data?.n != undefined ? data.n + " - ":  "") + t('scoreCard.documentTitle')
 })
 
 </script>
@@ -150,13 +180,13 @@ onMounted(() => {
   <main>
 
     <p class="invalid-link" v-if="data == null">
-      Linkin tulostietojen käsittely ei onnistunut. Onko linkki kopioitu oikein?
+      {{ t('scoreCard.invalidLink') }}
     </p>
 
     <div v-if="data != null" class="main">
 
-      <h1 class="score-card-title-1"><a :href="baseUrl">SRA Ampumakoe</a></h1>
-      <h2 class="score-card-title-2">Tuloskortti</h2>
+      <h1 class="score-card-title-1"><a :href="baseUrl">{{ t('scoreCard.title') }}</a></h1>
+      <h2 class="score-card-title-2">{{ t('scoreCard.scoreCard') }}</h2>
       <div class="date-and-place">
         {{ data.dl }}
       </div>
@@ -167,7 +197,7 @@ onMounted(() => {
       <table class="score-card">
         <thead>
         <tr>
-          <th>Rasti</th><th>Osumat</th><th>Pisteet</th><th>Aika</th><th title="Osumakerroin: pisteet jaettuna ajalla (sekunnit).">HF</th>
+          <th>{{ t('scoreCard.columnStage') }}</th><th>{{ t('scoreCard.columnHits') }}</th><th>{{ t('scoreCard.columnPoints') }}</th><th>{{ t('scoreCard.columnTime') }}</th><th :title="t('scoreCard.columnHfTooltip')">HF</th>
         </tr>
         </thead>
         <tbody>
@@ -197,23 +227,23 @@ onMounted(() => {
           </td>
         </tr>
         <tr class="total">
-          <th>Yht.</th>
+          <th>{{ t('scoreCard.total') }}</th>
           <td>{{ formatHits(data.r[0].map((_, colIndex) => data.r.reduce((sum, row) => sum + (row[colIndex] ?? 0), 0))) }}</td>
           <td>{{ points(data.r[0].map((_, colIndex) => data.r.reduce((sum, row) => sum + (row[colIndex] ?? 0), 0))) }}</td>
           <td>{{ formatTime(data.a.reduce((sum, val) => sum + val, 0)) }}</td>
           <td>{{ formatHF(hitFactor(data)) }}</td>
         </tr>
         <tr>
-          <th colspan="3">Tulos</th><td colspan="2">
-          <span id="result" v-bind:class="formatResult(data)">
-          {{ formatResult(data) }}
+          <th colspan="3">{{ t('scoreCard.resultLabel') }}</th><td colspan="2">
+          <span id="result" v-bind:class="resultStatus(data) ?? ''">
+          {{ resultText(data) }}
           </span>
         </td>
         </tr>
-        <tr v-if="data.h != null && data.h != ''">
-          <th colspan="3">Hylkäyksen syy</th>
+        <tr v-if="effectiveDqReason != null">
+          <th colspan="3">{{ t('scoreCard.dqReasonLabel') }}</th>
           <td colspan="2">
-            {{ data.h }}
+            {{ effectiveDqReason }}
           </td>
         </tr>
         </tbody>
@@ -221,7 +251,7 @@ onMounted(() => {
 
       <div v-if="testComplete(data) && (data.tn != '' || data.tno != '')" class="referee-stamp">
         <div v-if="data.tn">{{ data.tn }}</div>
-        <div v-if="data.tno">SRA-tuomari {{ data.tno }}</div>
+        <div v-if="data.tno">{{ t('scoreCard.sraReferee') }} {{ data.tno }}</div>
       </div>
 
 
@@ -232,22 +262,21 @@ onMounted(() => {
 
       <div class="actions">
         <button v-if=shareSupported @click="sharePage" class="action">
-          <ShareAndroid /><span>Jaa</span>
+          <ShareAndroid /><span>{{ t('scoreCard.share') }}</span>
         </button>
 
         <button @click="copyLink" class="action">
-          <Copy /><span>Kopioi linkki</span>
+          <Copy /><span>{{ t('scoreCard.copyLink') }}</span>
         </button>
       </div>
     </div>
 
     <div v-if="data != null && testComplete(data)" class="not-stored">
-      Tulostietoja ei tallenneta palvelimelle. Tällä sivulla esitetyt tulostiedot on sisällytetty QR-koodin linkin
-      tietoihin.
+      {{ t('scoreCard.notStored') }}
     </div>
 
     <div class="footer">
-      <a :href="baseUrl">SRA-koe sovellus</a>
+      <a :href="baseUrl">{{ t('shootingTestApp') }}</a>
     </div>
 
   </main>

@@ -1,7 +1,11 @@
 import pako from 'pako'
 
-export const recordDisqualification = (scoresStore: any, shooter: string) => {
-    const reason = window.prompt("Ampujan " + shooter + " hylkäämisen syy?", "") as string
+/**
+ * Prompts the user for a disqualification reason. The promptMessage parameter
+ * is the localized message; callers supply it from their i18n context.
+ */
+export const recordDisqualification = (scoresStore: any, shooter: string, promptMessage: string) => {
+    const reason = window.prompt(promptMessage, "") as string
     if (reason != null && reason !== "") {
         scoresStore.recordDisqualification(shooter, reason)
     }

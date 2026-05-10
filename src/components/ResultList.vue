@@ -5,12 +5,14 @@
 
 import { useScoresStore } from '@/stores/scores'
 import { ref } from "vue"
+import { useI18n } from 'vue-i18n'
 import { StageStatus, SraShootingTest } from "@/classes/SraShootingTest"
 import { MapPin, Calendar, User, CardShield, Phone, ShareAndroid  } from '@iconoir/vue'
 import { PdfReport } from "@/classes/PdfReport"
 import { shareLink, shareData } from "@/classes/Util";
 
 const scoresStore = useScoresStore()
+const { t } = useI18n()
 
 let newShooterName = ref('')
 
@@ -26,11 +28,11 @@ const addShooter = (name: string) => {
   const addedFirstName = name.split(' ')[0]
   const anotherHasSameFirstName = Object.keys(scoresStore.scores).map((it) => it.split(' ')[0]).filter(x => x === addedFirstName).length > 0
   if (scoresStore.scores[name] !== undefined) {
-    console.warn("Ampuja nimellä " + name + " on jo listalla.")
+    console.warn(t('resultList.warnDuplicateShooter', { name }))
     return
   }
   if (anotherHasSameFirstName && name.split(' ').length == 1) {
-    console.warn("Ampuja etunimellä " + addedFirstName + " on jo listalla. Lisää sukunimi.")
+    console.warn(t('resultList.warnDuplicateFirstName', { name: addedFirstName }))
     return
   }
   scoresStore.addShooter(name)
@@ -46,18 +48,27 @@ const formatHitFactor = (hitFactor: number) => {
   }
 }
 
-const formatResult = (allStagesCompleted: boolean, hitFactor: number, shooter: string) => {
+/** Returns a stable status key: 'failed', 'in-progress', or 'passed'. */
+const resultStatus = (allStagesCompleted: boolean, hitFactor: number, shooter: string): 'failed' | 'in-progress' | 'passed' => {
   if (shooter in scoresStore.disqualifications) {
-    return "HYLÄTTY"
+    return 'failed'
   }
-
   if (!allStagesCompleted) {
-    return "KESKEN"
+    return 'in-progress'
   }
   if (hitFactor >= SraShootingTest.requiredHitFactor) {
-    return "HYVÄKSYTTY"
+    return 'passed'
   }
-  return "HYLÄTTY"
+  return 'failed'
+}
+
+const resultText = (allStagesCompleted: boolean, hitFactor: number, shooter: string) => {
+  const status = resultStatus(allStagesCompleted, hitFactor, shooter)
+  switch (status) {
+    case 'failed': return t('result.failed')
+    case 'in-progress': return t('result.inProgress')
+    case 'passed': return t('result.passed')
+  }
 }
 
 const mapClass = (status: StageStatus) => {
@@ -72,7 +83,7 @@ const mapClass = (status: StageStatus) => {
 }
 
 const confirmRemove = (shooter: string) => {
-  if (confirm(`Poista ampujan ${shooter} tulostiedot?`)) {
+  if (confirm(t('resultList.confirmRemoveShooter', { shooter }))) {
     scoresStore.removeShooter(shooter)
   }
 }
@@ -87,18 +98,10 @@ function showTestEventDetails(): boolean {
 }
 
 const reset = () => {
-  if (confirm("Haluatko todella tyhjentää listan ja poistaa kaikki tulokset?")) {
+  if (confirm(t('resultList.confirmReset'))) {
     scoresStore.reset()
   }
 }
-
-// Auto-populate shooters during development
-// onMounted(() => {
-//   addShooter('Katriina')
-//   addShooter('Maija')
-//   addShooter('Heidi')
-//   addShooter('Tiina')
-// })
 
 </script>
 
@@ -108,13 +111,11 @@ const reset = () => {
     <div class="content">
 
       <div class="intro" v-if="editMode">
-        Tervetuloa SRA ampumakokeeseen. Syötä ampumakokeeseen ostallistuvien henkilöiden nimet alla. Sovellukseen
-        kirjatut tiedot tallentuvat ainoastaan päätelaitteen muistiin. Tietoja ei tallenneta ja jaeta verkossa. Voit
-        ladata PDF-muotoiset tulospöytäkirjat tuloksien kirjaamisen jälkeen.
+        {{ t('resultList.intro') }}
       </div>
 
-      <h2 v-if="editMode">Ampujat</h2>
-      <h2 v-if="!editMode">Tuloslista</h2>
+      <h2 v-if="editMode">{{ t('resultList.shooters') }}</h2>
+      <h2 v-if="!editMode">{{ t('resultList.title') }}</h2>
 
       <ul v-if="editMode" class="shooters">
         <li v-bind:key="shooter" v-for="(shooterScores, shooter) in scoresStore.scores">
@@ -125,15 +126,15 @@ const reset = () => {
       <table id="result-list" cellspacing="0" v-if="!editMode">
         <thead>
         <tr>
-          <th class="name">Nimi</th>
-          <th class="stage-dots">Rastit</th>
-          <th class="hit-factor">Tulos ja HF</th>
-          <th class="result">Pöytäkirja</th>
-          <th v-if="editMode">Poista</th>
+          <th class="name">{{ t('resultList.columnName') }}</th>
+          <th class="stage-dots">{{ t('resultList.columnStages') }}</th>
+          <th class="hit-factor">{{ t('resultList.columnResultAndHf') }}</th>
+          <th class="result">{{ t('resultList.columnReport') }}</th>
+          <th v-if="editMode">{{ t('resultList.columnRemove') }}</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-bind:key="shooter" v-for="(shooterScores, shooter) in scoresStore.scores" v-bind:class="{dq: scoresStore.getDisqualificationReason(shooter as string) }">
+        <tr v-bind:key="shooter" v-for="(shooterScores, shooter) in scoresStore.scores" v-bind:class="{dq: scoresStore.isDisqualified(shooter as string) }">
           <td class="name">
             <a :href="'shooter/' + shooter"><span>{{ shooter }}</span></a>
           </td>
@@ -142,9 +143,9 @@ const reset = () => {
               <a :href="'entry/' + stage + '/' + shooter">{{ stage+1 }}</a></div>
           </td>
           <td>
-          <span id="result" v-bind:class="formatResult(scoresStore.getAllStagesCompleted(shooter as string), scoresStore.getShooterHitFactor(shooter as string), shooter as string)">
+          <span id="result" v-bind:class="resultStatus(scoresStore.getAllStagesCompleted(shooter as string), scoresStore.getShooterHitFactor(shooter as string), shooter as string)">
           {{
-              formatResult(scoresStore.getAllStagesCompleted(shooter as string), scoresStore.getShooterHitFactor(shooter as string), shooter as string)
+              resultText(scoresStore.getAllStagesCompleted(shooter as string), scoresStore.getShooterHitFactor(shooter as string), shooter as string)
             }}
           </span>
             {{ formatHitFactor(scoresStore.getShooterHitFactor(shooter as string)) }}
@@ -152,39 +153,39 @@ const reset = () => {
 
           <td class="result-buttons"><button @click="(new PdfReport()).createPdf(shooter as string, scoresStore)">PDF</button> <a :href="shareLink(shareData(shooter, scoresStore))"><ShareAndroid/> </a></td>
 
-          <td v-if="editMode"><button class="danger" @click="confirmRemove(shooter as string)">🗑 POISTA</button></td>
+          <td v-if="editMode"><button class="danger" @click="confirmRemove(shooter as string)">{{ t('resultList.removeBtn') }}</button></td>
         </tr>
         </tbody>
       </table>
 
       <fieldset v-if="editMode" >
-        <legend>Lisää ampuja</legend>
-        <input placeholder="Ampujan nimi" id="new-name" name="new-name" v-model="newShooterName" v-on:keyup.enter="addShooter(newShooterName)"/>
-        <button class="action" value="Lisää" @click="addShooter(newShooterName);scoresStore.safetyTrainingCompleted = false;">Lisää</button>
+        <legend>{{ t('resultList.addShooter') }}</legend>
+        <input :placeholder="t('resultList.namePlaceholder')" id="new-name" name="new-name" v-model="newShooterName" v-on:keyup.enter="addShooter(newShooterName)"/>
+        <button class="action" :value="t('resultList.add')" @click="addShooter(newShooterName);scoresStore.safetyTrainingCompleted = false;">{{ t('resultList.add') }}</button>
       </fieldset>
 
 
       <fieldset v-if="editMode">
-        <legend>Kokeen ampumajärjestys</legend>
+        <legend>{{ t('resultList.shootingOrder') }}</legend>
         <input type="radio" id="rotating-order" name="shooting-order" v-model="scoresStore.order" value="rotating" checked />
-        <label for="rotating-order">Kiertävä järjestys: ensimmäisenä ampunut siirtyy seuraavalla rastilla viimeiseksi</label>
+        <label for="rotating-order">{{ t('resultList.rotatingOrder') }}</label>
         <input type="radio" id="fixed-order" name="shooting-order" v-model="scoresStore.order" value="fixed" />
-        <label for="fixed-order">Sama järjestys joka rastilla</label>
+        <label for="fixed-order">{{ t('resultList.fixedOrder') }}</label>
       </fieldset>
 
       <div>
         <div v-if="editMode" @click="toggleTestEventDetails = !toggleTestEventDetails" class="accordion-header">
-          <h3>Koetilaisuus »</h3>
+          <h3>{{ t('resultList.testEvent') }}</h3>
         </div>
       </div>
 
       <div v-if="showTestEventDetails()" class="accordion-content">
 
         <fieldset v-if="editMode || scoresStore.testEvent_place != '' || scoresStore.testEvent_date != ''">
-          <legend>Paikka ja aika</legend>
+          <legend>{{ t('resultList.placeAndTime') }}</legend>
           <div>
             <div v-if="editMode || scoresStore.testEvent_place != ''">
-              <MapPin/><input id="test-event-place" v-model="scoresStore.testEvent_place" placeholder="Paikka" :readonly="!editMode"/>
+              <MapPin/><input id="test-event-place" v-model="scoresStore.testEvent_place" :placeholder="t('resultList.placePlaceholder')" :readonly="!editMode"/>
             </div>
             <div v-if="editMode || scoresStore.testEvent_date != ''">
               <Calendar/><input id="test-event-date" v-model="scoresStore.testEvent_date" type="date" :readonly="!editMode"/>
@@ -193,29 +194,29 @@ const reset = () => {
         </fieldset>
 
         <fieldset v-if="editMode || scoresStore.referee_name !==''">
-          <legend>Vastaanottava tuomari</legend>
+          <legend>{{ t('resultList.receivingReferee') }}</legend>
           <div>
             <div v-if="editMode || scoresStore.referee_name !==''">
-              <User/><input id="referee-name" v-model="scoresStore.referee_name" placeholder="Nimi" :readonly="!editMode"/>
+              <User/><input id="referee-name" v-model="scoresStore.referee_name" :placeholder="t('resultList.namePlaceholderReferee')" :readonly="!editMode"/>
             </div>
             <div v-if="editMode || scoresStore.referee_sraid !==''">
-              <CardShield/><input v-model="scoresStore.referee_sraid" placeholder="SRA ID" :readonly="!editMode"/>
+              <CardShield/><input v-model="scoresStore.referee_sraid" :placeholder="t('resultList.sraIdPlaceholder')" :readonly="!editMode"/>
             </div>
             <div v-if="editMode || scoresStore.referee_phone !==''">
-              <Phone/><input v-model="scoresStore.referee_phone" placeholder="Puhelin" :readonly="!editMode"/>
+              <Phone/><input v-model="scoresStore.referee_phone" :placeholder="t('resultList.phonePlaceholder')" :readonly="!editMode"/>
             </div>
           </div>
         </fieldset>
       </div>
 
       <div class="actions">
-        <button class="action danger" v-if="editMode && Object.keys(scoresStore.scores).length > 0" @click="reset()">Poista kaikki ampujat</button>
-        <button v-if="editMode && Object.keys(scoresStore.scores).length > 1" @click="scoresStore.randomizeOrder()" class="action">⤭ Järjestä satunnaisesti</button>
-        <button class="action" v-if="Object.keys(scoresStore.scores).length > 0 && !editMode" @click="editMode = !editMode">Muokkaa tietoja</button>
-        <button class="action" v-if="Object.keys(scoresStore.scores).length > 0 && editMode && scoresStore.safetyTrainingCompleted" @click="editMode = !editMode">Jatka</button>
-        <button class="action" v-if="Object.keys(scoresStore.scores).length > 0 && editMode && scoresStore.safetyTrainingCompleted == false" @click="$router.push('safety')">Jatka</button>
+        <button class="action danger" v-if="editMode && Object.keys(scoresStore.scores).length > 0" @click="reset()">{{ t('resultList.removeAll') }}</button>
+        <button v-if="editMode && Object.keys(scoresStore.scores).length > 1" @click="scoresStore.randomizeOrder()" class="action">{{ t('resultList.randomize') }}</button>
+        <button class="action" v-if="Object.keys(scoresStore.scores).length > 0 && !editMode" @click="editMode = !editMode">{{ t('resultList.editInfo') }}</button>
+        <button class="action" v-if="Object.keys(scoresStore.scores).length > 0 && editMode && scoresStore.safetyTrainingCompleted" @click="editMode = !editMode">{{ t('resultList.continue') }}</button>
+        <button class="action" v-if="Object.keys(scoresStore.scores).length > 0 && editMode && scoresStore.safetyTrainingCompleted == false" @click="$router.push('safety')">{{ t('resultList.continue') }}</button>
 
-        <button v-if="!editMode && scoresStore.safetyTrainingCompleted" class="action" @click="$router.push('entry/0/' + Object.keys(scoresStore.scores)[0])">Aloita ampumakoe</button>
+        <button v-if="!editMode && scoresStore.safetyTrainingCompleted" class="action" @click="$router.push('entry/0/' + Object.keys(scoresStore.scores)[0])">{{ t('resultList.startTest') }}</button>
       </div>
 
     </div>

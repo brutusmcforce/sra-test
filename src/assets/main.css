@@ -127,15 +127,15 @@ width: 98%;
 
 }
 
-#tulos {
+#result {
   font-weight: bold;
-  &.KESKEN {
+  &.in-progress {
     color: #2f2f2f;
   }
-  &.HYVÄKSYTTY {
+  &.passed {
     color: darkgreen;
   }
-  &.HYLÄTTY {
+  &.failed {
     color: darkred;
     :before {
       content: 'g';

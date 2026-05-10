@@ -1,32 +1,28 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 const version = __APP_VERSION__
+const { t } = useI18n()
 </script>
 
 
 <template>
   <div class="about">
-    <h1>Tietoja</h1>
+    <h1>{{ t('about.heading') }}</h1>
 
     <p>
-      Sovelluksen versio {{ version }}
+      {{ t('about.appVersion', { version }) }}
     </p>
 
     <p>
-      Tämä on Sovelletun reserviläisammunan (SRA) käytännön ampumakokeen pisteystystyökalu, jota voidaan
-      käyttää ampumakoetilaisuuksissa pisteenlaskun apuna. Sovellettu reserviläisammunta on Reserviläisurheiluliiton
-      hallinnoima toiminnallinen ampumalaji. Tämä sovellus ei ole Reserviläisurheiluliiton hyväksymä tai virallinen
-      työkalu, mutta voi olla hyödyllinen koetilaisuuksien toteuttamisessa ja PDF-muotoisten koepöytäkirjojen
-      tuottamisessa.
+      {{ t('about.description') }}
     </p>
 
-    <h2>Yksityisyys</h2>
+    <h2>{{ t('about.privacyHeading') }}</h2>
     <p>
-      Pistelaskurin tallentamat tiedot ovat: ampujan nimi ja ampumasuorituksien aika- ja pistelukemat. Tiedot
-      tallentuvat ainoastaan päätelaitteen (selainohjelman) muistiin. Tietoja ei tallenneta verkkopalvelimille tai
-      pilvipalveluihin.
+      {{ t('about.privacyBody') }}
     </p>
 
-    <h2>Linkkejä</h2>
+    <h2>{{ t('about.linksHeading') }}</h2>
     <ul>
       <li><a href="https://resul.fi/sra/">Sovelletun reserviläisammunnan esittely Reserviläisurheiluliitin sivuilla</a></li>
       <li><a href="https://www.varusteleka.fi/fi/article/opas-toiminnallisen-ampumaharrastuksen-pariin/65356">Varusteleka: Opas toiminnallisen ampumaharrastuksen pariin</a></li>
@@ -34,16 +30,15 @@ const version = __APP_VERSION__
       <li><a href="https://resul.fi/wp-content/uploads/2023/05/SRA-ampumakoe-2023.pdf">SRA ampumakoe</a></li>
     </ul>
 
-    <h2>Palaute ja kehitys</h2>
+    <h2>{{ t('about.feedbackHeading') }}</h2>
     <p>
-      Jos huomaat sovelluksessa puutteita tai toivoisit parannuksia, ole yhteydessä suoraan kehittäjään Matti Pöllä
-      <a href="mailto:mpo@iki.fi">mpo@iki.fi</a>.
+      {{ t('about.feedbackBody') }}<a href="mailto:mpo@iki.fi">mpo@iki.fi</a>.
     </p>
     <p>
-      <a href="https://github.com/mpolla/sra-koe">Projekti Githubissa</a>
+      <a href="https://github.com/mpolla/sra-koe">{{ t('about.githubLink') }}</a>
     </p>
 
-    <h2>Versiohistoria</h2>
+    <h2>{{ t('about.changelogHeading') }}</h2>
 
     <h3>0.8.0 (4.1.2026)</h3>
     <ul>

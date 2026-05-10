@@ -1,8 +1,10 @@
 <script setup lang="ts">
 
 import { useScoresStore } from '@/stores/scores'
+import { useI18n } from 'vue-i18n'
 
 const scoresStore = useScoresStore()
+const { t } = useI18n()
 
 </script>
 
@@ -12,32 +14,28 @@ const scoresStore = useScoresStore()
   <main class="safety">
     <div class="content">
 
-  <h1>Turvallisuus</h1>
+  <h1>{{ t('safety.heading') }}</h1>
   <p>
-    Kaikessa aseen käytössä on noudatettava seuraavia turvallisen aseenkäsittelyn sääntöjä:
+    {{ t('safety.intro') }}
   </p>
   <ol class="handling-rules">
-    <li><b>Asetta on aina käsiteltävä kuin se olisi ladattu</b>.
-      Ei ole merkitystä, onko ase ladattu tai onko ase toimimaton käsittelyase, käsittelyn on aina oltava
-      samanlaista.</li>
-    <li>Piippukontrolli, <b>aseen piipun on aina osoitettava turvalliseen suuntaan</b>.
-      "Laser-sääntö", aseella ei saa koskaan osoittaa mitään sellaista, jota ei halua
-      tuhota.</li>
-    <li>Sormivarmistus, <b>sormi pidetään pois liipaisimelta ennen ampumapäätöstä</b>.
-      Liipaisinsormi on pidettävä tietoisesti aseen rungolla. Sormi laitetaan liipaisimelle
-      vasta, kun on tehty tietoinen ampumapäätös.</li>
-    <li><b>Tunnista maali ja varmista tausta</b>.
-      Maali on aina tunnistettava ennen kuin sitä ammutaan. Maalin takana ei saa olla
-      omia taistelijoita tai sivullisia.</li>
+    <li><b>{{ t('safety.rule1Bold') }}</b>.
+      {{ t('safety.rule1Body') }}</li>
+    <li>{{ t('safety.rule2Prefix') }}<b>{{ t('safety.rule2Bold') }}</b>.
+      {{ t('safety.rule2Body') }}</li>
+    <li>{{ t('safety.rule3Prefix') }}<b>{{ t('safety.rule3Bold') }}</b>.
+      {{ t('safety.rule3Body') }}</li>
+    <li><b>{{ t('safety.rule4Bold') }}</b>.
+      {{ t('safety.rule4Body') }}</li>
   </ol>
 
   <div class="safety-checkbox">
     <input v-model="scoresStore.safetyTrainingCompleted" type="checkbox" id="safety-acknowledgment"/>
-    <label for="checkbox">Kaikki ampumakokeen osallistujat tuntevat yllä olevat turvalliset aseen käsittelyn säännöt.</label>
+    <label for="checkbox">{{ t('safety.acknowledgment') }}</label>
   </div>
 
   <div class="actions continue">
-    <button class="action" :disabled="!scoresStore.safetyTrainingCompleted" @click="scoresStore.safetyTrainingCompleted = true; $router.push('/')">Jatka</button>
+    <button class="action" :disabled="!scoresStore.safetyTrainingCompleted" @click="scoresStore.safetyTrainingCompleted = true; $router.push('/')">{{ t('safety.continue') }}</button>
   </div>
     </div>
   </main>

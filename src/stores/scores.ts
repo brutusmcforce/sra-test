@@ -31,7 +31,6 @@ const orderIsSame = (a: string[], b: string[]) => {
 export const useScoresStore = defineStore('pisteet', {
   state: () => ({
     safetyTrainingCompleted: false,
-    mute: true,
     count: 0,
     scores: {} as ShooterScores,
     times: {} as ShooterTimes,
@@ -165,13 +164,24 @@ export const useScoresStore = defineStore('pisteet', {
     getAllStagesCompleted(shooter: string) {
       return [0,1,2,3,4].map((x) => this.getStageStatus(shooter, x)).filter((x) => x === StageStatus.Completed).length === 5
     },
-    getDisqualificationReason(shooter: string) {
+    /**
+     * Returns the manually recorded disqualification reason, or null if not disqualified.
+     * For an auto-disqualification (hit factor below threshold), use `isAutoDisqualified`
+     * and format the reason at the UI layer (with i18n).
+     */
+    getDisqualificationReason(shooter: string): string | null {
       if (this.disqualifications[shooter] != null) {
         return this.disqualifications[shooter]
-      } else if (this.getAllShot(shooter) && this.getShooterHitFactor(shooter) < SraShootingTest.requiredHitFactor) {
-        return "Osumakerroin alle " + SraShootingTest.requiredHitFactor + "."
       }
       return null
+    },
+    isAutoDisqualified(shooter: string): boolean {
+      return this.disqualifications[shooter] == null
+        && this.getAllShot(shooter)
+        && this.getShooterHitFactor(shooter) < SraShootingTest.requiredHitFactor
+    },
+    isDisqualified(shooter: string): boolean {
+      return this.disqualifications[shooter] != null || this.isAutoDisqualified(shooter)
     },
     recordDisqualification(shooter: string, reason: string) {
       this.disqualifications[shooter] = reason
