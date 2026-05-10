@@ -16,6 +16,8 @@ const sum = (xs: number[]) => xs.reduce((a, b) => a + b, 0)
 // NOTE: persistence key kept as 'pisteet' so existing users' saved data continues to load.
 // State fields with snake_case names (referee_*, testEvent_*) are also persisted under
 // those keys; do not rename without a migration.
+export type ScoresStore = ReturnType<typeof useScoresStore>
+
 export const useScoresStore = defineStore('pisteet', {
   state: () => ({
     safetyTrainingCompleted: false,
@@ -23,7 +25,7 @@ export const useScoresStore = defineStore('pisteet', {
     times: {} as ShooterTimes,
     disqualifications: {} as Record<string, string>,
     stage5Methods: {} as Record<string, string>,
-    birthDates: {} as Record<string, Date>,
+    birthDates: {} as Record<string, string>,
     courseNumbers: {} as Record<string, string>,
     clubs: {} as Record<string, string>,
     order: '',
@@ -56,7 +58,7 @@ export const useScoresStore = defineStore('pisteet', {
         this.safetyTrainingCompleted = false
       }
     },
-    setBirthDate(shooter: string, date: Date) {
+    setBirthDate(shooter: string, date: string) {
       this.birthDates[shooter] = date
     },
     setCourseNumber(shooter: string, courseNumber: string) {

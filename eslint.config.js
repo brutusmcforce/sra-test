@@ -9,7 +9,13 @@ export default [
   },
   {
     name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/node_modules/**'],
+    ignores: [
+      '**/dist/**',
+      '**/dist-ssr/**',
+      '**/dev-dist/**',
+      '**/coverage/**',
+      '**/node_modules/**',
+    ],
   },
   ...pluginVue.configs['flat/essential'],
   ...vueTsEslintConfig(),

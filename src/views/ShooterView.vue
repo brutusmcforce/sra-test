@@ -32,7 +32,7 @@ const onPdf = () => {
 }
 
 const onBirthDate = (e: Event) =>
-  scoresStore.setBirthDate(shooter, (e.target as HTMLInputElement).value as any)
+  scoresStore.setBirthDate(shooter, (e.target as HTMLInputElement).value)
 const onCourseNumber = (e: Event) =>
   scoresStore.setCourseNumber(shooter, (e.target as HTMLInputElement).value)
 const onClub = (e: Event) =>

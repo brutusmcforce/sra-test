@@ -1,5 +1,6 @@
 import { PDFDocument, rgb } from 'pdf-lib'
 import { SraShootingTest } from '@/classes/SraShootingTest'
+import type { ScoresStore } from '@/stores/scores'
 
 function downloadBytes(bytes: Uint8Array, filename: string, mimeType: string) {
   const blob = new Blob([bytes as BlobPart], { type: mimeType })
@@ -43,7 +44,7 @@ export class PdfReport {
         }
     }
 
-    pdfRefereeInfo(scoresStore: any) {
+    pdfRefereeInfo(scoresStore: ScoresStore) {
         let refereeInfo = "";
         refereeInfo += scoresStore.referee_name
         if (scoresStore.referee_sraid != undefined && scoresStore.referee_sraid != "") {
@@ -55,7 +56,7 @@ export class PdfReport {
         return refereeInfo
     }
 
-    async createPdf(shooter: string, scoresStore: any, path = "") {
+    async createPdf(shooter: string, scoresStore: ScoresStore, path = "") {
         const STAGE_Y_OFFSET = [687, 573, 469, 366, 262]
 
         const ROW_H = 12
