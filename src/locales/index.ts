@@ -1,24 +1,18 @@
-import fi from './fi'
-import sv from './sv'
-import en from './en'
+import fi from "./fi";
+import sv from "./sv";
+import en from "./en";
 
-export const SUPPORTED_LOCALES = ['fi', 'sv', 'en'] as const
-export type SupportedLocale = typeof SUPPORTED_LOCALES[number]
+export const SUPPORTED_LOCALES = ["fi", "sv", "en"] as const;
+export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
-export const DEFAULT_LOCALE: SupportedLocale = 'sv'
+export const DEFAULT_LOCALE: SupportedLocale = "sv";
 
-export const messages = { fi, sv, en }
+export const messages = { fi, sv, en };
 
 export function detectLocale(): SupportedLocale {
-  const stored = localStorage.getItem('locale')
+  const stored = localStorage.getItem("locale");
   if (stored && (SUPPORTED_LOCALES as readonly string[]).includes(stored)) {
-    return stored as SupportedLocale
+    return stored as SupportedLocale;
   }
-  const browser = (navigator.language || '').toLowerCase()
-  for (const code of SUPPORTED_LOCALES) {
-    if (browser.startsWith(code)) {
-      return code
-    }
-  }
-  return DEFAULT_LOCALE
+  return DEFAULT_LOCALE;
 }
