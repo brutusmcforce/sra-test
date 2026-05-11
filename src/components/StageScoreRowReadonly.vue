@@ -1,6 +1,6 @@
 <template>
   <tr class="result-row">
-    <th class="hit-class">{{ props.hitClass }}</th>
+    <th class="hit-class">{{ hitClassLabel(props.hitClass) }}</th>
     <td class="ballpoint-pen">{{ hitCountTarget0 > 0 ?  hitCountTarget0 : "" }}</td>
     <td class="ballpoint-pen">{{ hitCountTarget1 > 0 ? hitCountTarget1 : "" }}</td>
     <td class="ballpoint-pen">{{ hitSum(scoresStore.scores[props.shooter][props.stage], SraShootingTest.hitClasses.indexOf(props.hitClass)) > 0 ? hitSum(scoresStore.scores[props.shooter][props.stage], SraShootingTest.hitClasses.indexOf(props.hitClass)) : "" }}</td>
@@ -18,8 +18,10 @@
 import { useScoresStore } from '@/stores/scores'
 import {SraShootingTest} from "@/classes/SraShootingTest";
 import {computed} from "vue";
+import { useI18n } from 'vue-i18n'
 
 const scoresStore = useScoresStore()
+const { t } = useI18n()
 
 interface Props {
   shooter: string,
@@ -27,6 +29,12 @@ interface Props {
   hitClass: string
 }
 const props = defineProps<Props>()
+
+const hitClassLabel = (cls: string): string => {
+  if (cls === "Miss") return t("scoring.hitClassMiss")
+  if (cls === "Penalty") return t("scoring.hitClassPenalty")
+  return cls
+}
 
 const hitCountTarget0 = computed( () =>  {
     return scoresStore.scores[props.shooter][props.stage][SraShootingTest.hitClasses.indexOf(props.hitClass)][0]

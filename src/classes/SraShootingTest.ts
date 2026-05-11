@@ -25,13 +25,13 @@ export class SraShootingTest {
     [6, 6],
   ];
 
-  static hitClasses = ["A", "C", "D", "Ohi", "Rang"];
+  static hitClasses = ["A", "C", "D", "Miss", "Penalty"];
 
   static stages = [0, 1, 2, 3, 4];
 
   static requiredHitFactor = 1.3;
 
-  static hitScoring = { A: 5, C: 3, D: 1, Ohi: -10, Rang: -10 };
+  static hitScoring = { A: 5, C: 3, D: 1, Miss: -10, Penalty: -10 };
 }
 
 export enum StageStatus {

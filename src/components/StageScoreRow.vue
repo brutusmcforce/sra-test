@@ -2,9 +2,11 @@
 import { useScoresStore } from '@/stores/scores'
 import { SraShootingTest } from "@/classes/SraShootingTest"
 import HitCounter from "@/components/HitCounter.vue"
+import { useI18n } from 'vue-i18n'
 
 
 const scoresStore = useScoresStore()
+const { t } = useI18n()
 
 interface Props {
   shooter: string,
@@ -12,6 +14,12 @@ interface Props {
   hitClass: string
 }
 const props = defineProps<Props>()
+
+const hitClassLabel = (cls: string): string => {
+  if (cls === "Miss") return t("scoring.hitClassMiss")
+  if (cls === "Penalty") return t("scoring.hitClassPenalty")
+  return cls
+}
 
 const hitSum = (sc: Array<Array<number>>, classIdx: number) : number => {
   return sc[classIdx].reduce((a, b) => Number(a) + Number(b), 0)
@@ -42,7 +50,7 @@ const pointSum = (sc: Array<Array<number>>, classIdx: number) : number => {
 
 <template>
   <tr>
-    <td>{{ props.hitClass }}</td>
+    <td>{{ hitClassLabel(props.hitClass) }}</td>
     <td>
       <HitCounter :shooter="shooter" :stage="stage" :hitClass="props.hitClass" :target="0" />
     </td>

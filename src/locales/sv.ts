@@ -24,7 +24,7 @@ export default {
     title: "Resultat",
     columnName: "Namn",
     columnStages: "Stationer",
-    columnResultAndHf: "Resultat och HF",
+    columnResultAndHf: "Resultat",
     columnReport: "Protokoll",
     columnRemove: "Ta bort",
     confirmRemoveShooter: "Ta bort resultatdata för {shooter}?",
@@ -88,6 +88,8 @@ export default {
     close: "Stäng",
     hits: "Träffar",
     points: "Poäng",
+    hitClassMiss: "M",
+    hitClassPenalty: "Straff",
     previousShooter: "Föregående skytt",
     nextShooter: "Nästa skytt",
     confirmIncomplete:

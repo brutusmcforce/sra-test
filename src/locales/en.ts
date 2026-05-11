@@ -85,6 +85,8 @@ export default {
     close: "Close",
     hits: "Hits",
     points: "Points",
+    hitClassMiss: "M",
+    hitClassPenalty: "Pen",
     previousShooter: "Previous shooter",
     nextShooter: "Next shooter",
     confirmIncomplete:

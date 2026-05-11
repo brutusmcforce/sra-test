@@ -15,7 +15,7 @@ const props = defineProps<Props>();
 
 const minHits = 0;
 
-/** Number of hits of this hit class (A/C/D/Ohi/Rang) on this target. */
+/** Number of hits of this hit class (A/C/D/Miss/Penalty) on this target. */
 const hitCount = computed({
   get() {
     return scoresStore.scores[props.shooter][props.stage][
@@ -33,19 +33,19 @@ const hitCount = computed({
 const penaltyCount = computed({
   get() {
     return scoresStore.scores[props.shooter][props.stage][
-      SraShootingTest.hitClasses.indexOf("Rang")
+      SraShootingTest.hitClasses.indexOf("Penalty")
     ][props.target];
   },
   set(newValue: number) {
     scoresStore.scores[props.shooter][props.stage][
-      SraShootingTest.hitClasses.indexOf("Rang")
+      SraShootingTest.hitClasses.indexOf("Penalty")
     ][props.target] = newValue;
   },
 });
 
 const maxHits = computed(() => {
   // Penalties have no actual maximum count
-  if (props.hitClass == "Rang") {
+  if (props.hitClass == "Penalty") {
     return 100;
   }
   if (scoresStore.stage5Methods[props.shooter] == "kiv") {
@@ -78,7 +78,7 @@ const minus = () => {
 };
 
 const plus = () => {
-  if (hitCount.value < maxHits.value || props.hitClass == "Rang") {
+  if (hitCount.value < maxHits.value || props.hitClass == "Penalty") {
     hitCount.value++;
   }
 };
@@ -104,7 +104,7 @@ const plus = () => {
     <button
       @click="plus()"
       :disabled="
-        (hitClass != 'Rang' && hitCount >= maxHits) ||
+        (hitClass != 'Penalty' && hitCount >= maxHits) ||
         shooter in scoresStore.disqualifications
       "
       :id="'T' + target + hitClass + 'plus'"

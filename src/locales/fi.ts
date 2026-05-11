@@ -86,6 +86,8 @@ export default {
     close: "Sulje",
     hits: "Osumat",
     points: "Pisteet",
+    hitClassMiss: "Ohi",
+    hitClassPenalty: "Rang",
     previousShooter: "Edellinen ampuja",
     nextShooter: "Seuraava ampuja",
     confirmIncomplete:

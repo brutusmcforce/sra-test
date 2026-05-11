@@ -74,11 +74,13 @@ export class PdfReportSv {
     pages[0].drawText(shooter, { x: 62, y: 725, size: 10 });
 
     // Födelsedata
-    pages[0].drawText(scoresStore.birthDates[shooter], {
-      x: 82,
-      y: 714,
-      size: 10,
-    });
+    if (scoresStore.birthDates[shooter] !== undefined) {
+      pages[0].drawText(scoresStore.birthDates[shooter], {
+        x: 82,
+        y: 714,
+        size: 10,
+      });
+    }
 
     // Division (Militär / Öppen / Standard)
     const CLASS_CHECKBOX_XY: Record<string, { x: number; y: number }> = {
