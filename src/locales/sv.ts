@@ -152,15 +152,18 @@ export default {
     heading: "Om",
     appVersion: "Applikationens version {version}",
     description:
-      "Detta är ett poängräkningsverktyg för det praktiska skjutprovet inom Tillämpad reservistskytte (SRA). Det kan användas som hjälp vid poängräkning på skjutprovstillfällen. SRA (Sovellettu reserviläisammunta) är en praktisk skjutgren som administreras av Reservistsportförbundet. Den här applikationen är inte godkänd eller officiell, men kan vara till nytta vid genomförandet av provtillfällen och vid framställning av PDF-protokoll.",
+      "Detta är ett poängräkningsverktyg för det praktiska skjutprovet inom SRA. Det kan användas som hjälp vid poängräkning på skjutprovstillfällen. SRA (Sovellettu reserviläisammunta) är en praktisk skjutgren som administreras av SPSF. Den här applikationen är inte godkänd eller officiell, men kan vara till nytta vid genomförandet av provtillfällen och vid framställning av PDF-protokoll.",
     privacyHeading: "Integritet",
     privacyBody:
       "Poängräknaren sparar: skyttens namn samt tider och poäng från skjutomgångarna. Uppgifterna sparas endast i den lokala enhetens (webbläsarens) minne. Inget sparas på servrar eller molntjänster.",
     linksHeading: "Länkar",
     feedbackHeading: "Feedback och utveckling",
     feedbackBody:
-      "Om du hittar brister eller har förslag, kontakta utvecklaren Matti Pöllä direkt på ",
+      "Om du hittar brister eller har förslag, kontakta utvecklaren Magnus von Wachenfeldt direkt på ",
     githubLink: "Projektet på GitHub",
     changelogHeading: "Versionshistorik",
+    creditsHeading: "Tack",
+    creditsBody:
+      "Den här applikationen bygger på Matti Pölläs gedigna arbete med originalverktyget. Källkoden för originalet finns på ",
   },
 };

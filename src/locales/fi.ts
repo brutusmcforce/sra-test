@@ -157,8 +157,11 @@ export default {
     linksHeading: "Linkkejä",
     feedbackHeading: "Palaute ja kehitys",
     feedbackBody:
-      "Jos huomaat sovelluksessa puutteita tai toivoisit parannuksia, ole yhteydessä suoraan kehittäjään Matti Pöllä ",
+      "Jos huomaat sovelluksessa puutteita tai toivoisit parannuksia, ole yhteydessä suoraan kehittäjään Magnus von Wachenfeldt ",
     githubLink: "Projekti Githubissa",
     changelogHeading: "Versiohistoria",
+    creditsHeading: "Kiitokset",
+    creditsBody:
+      "Tämä sovellus perustuu Matti Pöllän alkuperäiseen työhön. Alkuperäisen sovelluksen lähdekoodi löytyy osoitteesta ",
   },
 };

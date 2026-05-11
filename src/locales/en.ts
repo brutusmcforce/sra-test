@@ -157,8 +157,11 @@ export default {
     linksHeading: "Links",
     feedbackHeading: "Feedback and development",
     feedbackBody:
-      "If you find issues or have suggestions, contact the developer Matti Pöllä directly at ",
+      "If you find issues or have suggestions, contact the developer Magnus von Wachenfeldt directly at ",
     githubLink: "Project on GitHub",
     changelogHeading: "Changelog",
+    creditsHeading: "Credits",
+    creditsBody:
+      "This app is based on the hard work of Matti Pöllä on the original scoring tool. The source code of the original is available at ",
   },
 };
