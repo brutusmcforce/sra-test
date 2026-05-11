@@ -1,36 +1,23 @@
-# SRA ampumakokeen pisteytyssovellus
+# Poängräkningverktyg för SRA-skjuttest
 
-Toimiva sovellus osoitteessa <https://mpolla.github.io/sra-koe/>
+Fungerande applikation finns på <https://brutusmcforce.github.io/sra-test/>
 
-Tämä on selainsovellus [SRA](https://resul.fi/sra/) (Sovellettu Reserviläisammunta) toiminnallisen ampumalajin
-ampumakoneen pisteiden laskentaan.
+Detta är en webbläsarapplikation för poängräkning av skjuttestet inom SRA, en praktisk skyttegren.
 
-Sovellus tallentaa tiedot ainoastaan paikalliseen päätelaitteeseen. Tietoja ei tallennneta tai jaeta verkkopalvelimilla.
+Applikationen sparar uppgifter enbart på den lokala enheten. Ingen information sparas eller delas via nätet.
 
-Jos löydät puutteita tai haluat ehdottaa parannuksia, ota yhteyttä kehittäjään <mpo@iki.fi>
+Om du hittar brister eller vill föreslå förbättringar, kontakta utvecklaren <magnus@raketlaboratoriet.se>.
 
-## Kehittäminen
+## Kör appen
 
     npm run dev
 
-## Julkaiseminen
-
-Päivitä muutosloki `src/views/AboutView.vue`
+## Publicering
 
     npm version minor
     npm run predeploy
     npm run deploy
 
-<!--
+## Tack
 
-Kehittäjän muistiinpanoja..
-
-Kuvien generointi
-
-  convert -background transparent -resize 64x64 -gravity center -extent 64x64 -define 'icon:auto-resize=16,24,32,64' public/logo.svg public/favicon.ico
-
-Kuvien (Public Domain) lähteet
-
-https://www.dvidshub.net/image/7873037/army-reserve-sgt-christine-won-and-army-reserve-1st-lt-jessica-romero-fire-glocks
-
--->
+Den här applikationen bygger på Matti Pölläs gedigna arbete med originalverktyget. Källkoden för originalet finns på <https://github.com/mpolla/sra-koe>
