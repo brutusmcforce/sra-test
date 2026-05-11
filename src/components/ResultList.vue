@@ -5,6 +5,7 @@
 
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { RouterLink } from 'vue-router'
 import { useScoresStore } from '@/stores/scores'
 import { StageStatus, SraShootingTest } from '@/classes/SraShootingTest'
 import { MapPin, Calendar, User, CardShield, Phone, ShareAndroid } from '@iconoir/vue'
@@ -104,7 +105,7 @@ const reset = () => {
 
       <ul v-if="editMode" class="shooters">
         <li v-for="(_, shooter) in scoresStore.scores" :key="shooter">
-          <a :href="'shooter/' + shooter"><span class="shooter">{{ shooter }}</span></a>
+          <RouterLink :to="'/shooter/' + shooter"><span class="shooter">{{ shooter }}</span></RouterLink>
           <span @click="confirmRemove(shooter as string)" class="remove">⨉</span>
         </li>
       </ul>
@@ -125,7 +126,7 @@ const reset = () => {
             :class="{ dq: scoresStore.isDisqualified(shooter as string) }"
           >
             <td class="name">
-              <a :href="'shooter/' + shooter"><span>{{ shooter }}</span></a>
+              <RouterLink :to="'/shooter/' + shooter"><span>{{ shooter }}</span></RouterLink>
             </td>
             <td class="stage-dots">
               <div
@@ -134,7 +135,7 @@ const reset = () => {
                 class="stage-dot"
                 :class="stageDotClass(scoresStore.getStageStatus(shooter as string, stage))"
               >
-                <a :href="'entry/' + stage + '/' + shooter">{{ stage + 1 }}</a>
+                <RouterLink :to="'/entry/' + stage + '/' + shooter">{{ stage + 1 }}</RouterLink>
               </div>
             </td>
             <td>
@@ -227,14 +228,14 @@ const reset = () => {
         <button
           v-if="Object.keys(scoresStore.scores).length > 0 && editMode"
           class="action"
-          @click="scoresStore.safetyTrainingCompleted ? (editMode = false) : $router.push('safety')"
+          @click="scoresStore.safetyTrainingCompleted ? (editMode = false) : $router.push('/safety')"
         >
           {{ t('resultList.continue') }}
         </button>
         <button
           v-if="!editMode && scoresStore.safetyTrainingCompleted"
           class="action"
-          @click="$router.push('entry/0/' + Object.keys(scoresStore.scores)[0])"
+          @click="$router.push('/entry/0/' + Object.keys(scoresStore.scores)[0])"
         >
           {{ t('resultList.startTest') }}
         </button>

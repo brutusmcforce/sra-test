@@ -71,13 +71,15 @@ export const useScoresStore = defineStore("score", {
     },
 
     getShooterStageTimes(shooter: string, stage: number): number[] {
-      return this.times[shooter][stage];
+      return this.times[shooter]?.[stage] ?? [0, 0, 0];
     },
     getShooterStageTime(shooter: string, stage: number): number {
-      return sum(this.times[shooter][stage].map(Number));
+      return sum(this.getShooterStageTimes(shooter, stage).map(Number));
     },
     getShooterStageClassHits(shooter: string, stage: number): number[] {
-      return this.scores[shooter][stage].map((row) => sum(row));
+      const rows = this.scores[shooter]?.[stage];
+      if (!rows) return [0, 0, 0, 0, 0];
+      return rows.map((row) => sum(row));
     },
     getShooterStagePoints(shooter: string, stage: number): number[] {
       return this.getShooterStageClassHits(shooter, stage).map(
@@ -123,10 +125,11 @@ export const useScoresStore = defineStore("score", {
           : sum(SraShootingTest.shotCountsWithRifle[stage]);
 
       // Stages 1 and 2 (indexes 0/1) record three series times; later stages record one.
+      const stageTimes = this.getShooterStageTimes(shooter, stage);
       const timesRecorded =
         stage <= 1
-          ? this.times[shooter][stage].slice(0, 3).every((t) => t > 0)
-          : this.times[shooter][stage][0] > 0;
+          ? stageTimes.slice(0, 3).every((t) => t > 0)
+          : stageTimes[0] > 0;
 
       if (
         (scoredHits > 0 && scoredHits < requiredShots) ||

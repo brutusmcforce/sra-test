@@ -84,4 +84,19 @@ const router = createRouter({
   },
 });
 
+// Recover from stale dynamic-import chunk hashes after a deploy.
+// Old HTML cached in the browser (or service worker) may reference a chunk
+// filename that no longer exists on the server; reload the page so the
+// fresh HTML — and the new chunk filenames it points at — are picked up.
+router.onError((error, to) => {
+  const message = error instanceof Error ? error.message : String(error);
+  if (
+    /Failed to fetch dynamically imported module|Importing a module script failed|Loading chunk \d+ failed/i.test(
+      message,
+    )
+  ) {
+    window.location.href = to.fullPath;
+  }
+});
+
 export default router;
