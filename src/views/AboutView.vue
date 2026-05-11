@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-const version = __APP_VERSION__;
 const { t } = useI18n();
 </script>
 
 <template>
   <div class="about">
     <h1>{{ t("about.heading") }}</h1>
-
-    <p>
-      {{ t("about.appVersion", { version }) }}
-    </p>
 
     <p>
       {{ t("about.description") }}
@@ -38,7 +33,10 @@ const { t } = useI18n();
     <h2>{{ t("about.creditsHeading") }}</h2>
     <p>
       {{ t("about.creditsBody")
-      }}<a href="https://github.com/mpolla/sra-koe" target="_blank" rel="noopener"
+      }}<a
+        href="https://github.com/mpolla/sra-koe"
+        target="_blank"
+        rel="noopener"
         >github.com/mpolla/sra-koe</a
       >.
     </p>
