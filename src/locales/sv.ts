@@ -57,7 +57,7 @@ export default {
     pdfHint: "Valfria tilläggsuppgifter som skrivs ut i PDF-protokollet.",
     birthDate: "Födelsedatum",
     courseNumber: "SRA-kursnummer eller annan identifierare",
-    club: "RU/RES/MPKL-förening",
+    club: "SRA-förening",
     shooterClass: "Division",
     shooterClassMilitar: "Militär",
     shooterClassOppen: "Öppen",

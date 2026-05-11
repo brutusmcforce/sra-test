@@ -1,102 +1,137 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { Prohibition, Undo, User } from '@iconoir/vue'
-import { useScoresStore } from '@/stores/scores'
-import { PdfReport } from '@/classes/PdfReport'
+import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { Prohibition, Undo, User } from "@iconoir/vue";
+import { useScoresStore } from "@/stores/scores";
+import { PdfReport } from "@/classes/PdfReport";
 import {
   recordDisqualification,
   cancelDisqualification,
   shareData,
   encodeData,
-} from '@/classes/Util'
+} from "@/classes/Util";
 
-const route = useRoute()
-const { t, locale } = useI18n()
-const scoresStore = useScoresStore()
+const route = useRoute();
+const { t, locale } = useI18n();
+const scoresStore = useScoresStore();
 
-const shooter = (route.params.shooter as string) ?? null
+const shooter = (route.params.shooter as string) ?? null;
 
 const onRecordDq = () => {
   if (shooter) {
-    recordDisqualification(scoresStore, shooter, t('shooter.dqPrompt', { shooter }))
+    recordDisqualification(
+      scoresStore,
+      shooter,
+      t("shooter.dqPrompt", { shooter }),
+    );
   }
-}
+};
 
 const onCancelDq = () => {
-  if (shooter) cancelDisqualification(scoresStore, shooter)
-}
+  if (shooter) cancelDisqualification(scoresStore, shooter);
+};
 
 const onPdf = () => {
-  if (shooter) new PdfReport().createPdf(shooter, scoresStore, '../')
-}
+  if (shooter) new PdfReport().createPdf(shooter, scoresStore, "../");
+};
 
 const onBirthDate = (e: Event) =>
-  scoresStore.setBirthDate(shooter, (e.target as HTMLInputElement).value)
+  scoresStore.setBirthDate(shooter, (e.target as HTMLInputElement).value);
 const onCourseNumber = (e: Event) =>
-  scoresStore.setCourseNumber(shooter, (e.target as HTMLInputElement).value)
+  scoresStore.setCourseNumber(shooter, (e.target as HTMLInputElement).value);
 const onClub = (e: Event) =>
-  scoresStore.setClub(shooter, (e.target as HTMLInputElement).value)
+  scoresStore.setClub(shooter, (e.target as HTMLInputElement).value);
 const onShooterClass = (e: Event) =>
-  scoresStore.setShooterClass(shooter, (e.target as HTMLSelectElement).value)
+  scoresStore.setShooterClass(shooter, (e.target as HTMLSelectElement).value);
 </script>
 
 <template>
   <main v-if="shooter">
     <div class="main">
-
       <div class="name-card">
         <User width="4rem" height="4rem" color="#888" />
         <h1>{{ shooter }}</h1>
       </div>
 
-      <p>{{ t('shooter.pdfHint') }}</p>
+      <p>{{ t("shooter.pdfHint") }}</p>
 
       <table class="course-info">
         <tbody>
           <tr>
-            <th>{{ t('shooter.birthDate') }}</th>
-            <td><input type="date" :value="scoresStore.birthDates[shooter]" @change="onBirthDate" /></td>
+            <th>{{ t("shooter.birthDate") }}</th>
+            <td>
+              <input
+                type="date"
+                :value="scoresStore.birthDates[shooter]"
+                @change="onBirthDate"
+              />
+            </td>
           </tr>
-          <tr v-if="locale !== 'sv'">
-            <th>{{ t('shooter.courseNumber') }}</th>
-            <td><input :value="scoresStore.courseNumbers[shooter]" @change="onCourseNumber" /></td>
+          <tr>
+            <th>{{ t("shooter.courseNumber") }}</th>
+            <td>
+              <input
+                :value="scoresStore.courseNumbers[shooter]"
+                @change="onCourseNumber"
+              />
+            </td>
           </tr>
-          <tr v-if="locale !== 'sv'">
-            <th>{{ t('shooter.club') }}</th>
-            <td><input :value="scoresStore.clubs[shooter]" @change="onClub" /></td>
+          <tr>
+            <th>{{ t("shooter.club") }}</th>
+            <td>
+              <input :value="scoresStore.clubs[shooter]" @change="onClub" />
+            </td>
           </tr>
           <tr v-if="locale === 'sv'">
-            <th>{{ t('shooter.shooterClass') }}</th>
+            <th>{{ t("shooter.shooterClass") }}</th>
             <td>
-              <select :value="scoresStore.shooterClasses[shooter]" @change="onShooterClass">
-                <option value="Militär">{{ t('shooter.shooterClassMilitar') }}</option>
-                <option value="Öppen">{{ t('shooter.shooterClassOppen') }}</option>
-                <option value="Standard">{{ t('shooter.shooterClassStandard') }}</option>
+              <select
+                :value="scoresStore.shooterClasses[shooter]"
+                @change="onShooterClass"
+              >
+                <option value="Militär">
+                  {{ t("shooter.shooterClassMilitar") }}
+                </option>
+                <option value="Öppen">
+                  {{ t("shooter.shooterClassOppen") }}
+                </option>
+                <option value="Standard">
+                  {{ t("shooter.shooterClassStandard") }}
+                </option>
               </select>
             </td>
           </tr>
         </tbody>
       </table>
 
-      <div v-if="scoresStore.disqualifications[shooter] != null" class="dq-reason">
-        {{ t('shooter.disqualificationReason') }} {{ scoresStore.disqualifications[shooter] }}
+      <div
+        v-if="scoresStore.disqualifications[shooter] != null"
+        class="dq-reason"
+      >
+        {{ t("shooter.disqualificationReason") }}
+        {{ scoresStore.disqualifications[shooter] }}
       </div>
 
       <div class="score-card-link">
         <a :href="'../result?d=' + encodeData(shareData(shooter, scoresStore))">
-          {{ t('shooter.scoreCardLink') }}
+          {{ t("shooter.scoreCardLink") }}
         </a>
       </div>
 
       <div class="actions">
-        <button v-if="!(shooter in scoresStore.disqualifications)" class="action dq" @click="onRecordDq">
-          <Prohibition /> {{ t('shooter.recordDq') }}
+        <button
+          v-if="!(shooter in scoresStore.disqualifications)"
+          class="action dq"
+          @click="onRecordDq"
+        >
+          <Prohibition /> {{ t("shooter.recordDq") }}
         </button>
         <button v-else class="action" @click="onCancelDq">
-          <Undo /> {{ t('shooter.cancelDq') }}
+          <Undo /> {{ t("shooter.cancelDq") }}
         </button>
-        <button class="action" @click="onPdf">{{ t('shooter.pdfReport') }}</button>
+        <button class="action" @click="onPdf">
+          {{ t("shooter.pdfReport") }}
+        </button>
       </div>
     </div>
   </main>
@@ -106,7 +141,9 @@ const onShooterClass = (e: Event) =>
 .course-info {
   margin-top: 1rem;
 
-  & th { font-size: 100%; }
+  & th {
+    font-size: 100%;
+  }
 }
 
 .dq-reason {
@@ -117,6 +154,8 @@ const onShooterClass = (e: Event) =>
 .score-card-link {
   text-align: right;
 
-  & a { color: black; }
+  & a {
+    color: black;
+  }
 }
 </style>
