@@ -8,7 +8,7 @@ export default {
     en: "English",
   },
   nav: {
-    resultList: "Results",
+    resultList: "Test",
     rules: "Rules",
     about: "About",
   },
