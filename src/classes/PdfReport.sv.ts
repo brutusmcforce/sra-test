@@ -71,22 +71,31 @@ export class PdfReportSv {
 
     pages[0].setFontColor(rgb(0.1, 0.1, 0.97));
 
-    pages[0].drawText(shooter, { x: 62, y: 725, size: 10 });
+    pages[0].drawText(shooter, { x: 62, y: 721, size: 10 });
 
-    // Födelsedata
-    if (scoresStore.birthDates[shooter] !== undefined) {
-      pages[0].drawText(scoresStore.birthDates[shooter], {
-        x: 82,
-        y: 714,
+    // Förening
+    if (scoresStore.clubs[shooter] !== undefined) {
+      pages[0].drawText(scoresStore.clubs[shooter], {
+        x: 70,
+        y: 707,
+        size: 10,
+      });
+    }
+
+    // Pistolskyttekortsnr
+    if (scoresStore.courseNumbers[shooter] !== undefined) {
+      pages[0].drawText(scoresStore.courseNumbers[shooter], {
+        x: 104,
+        y: 692,
         size: 10,
       });
     }
 
     // Division (Militär / Öppen / Standard)
     const CLASS_CHECKBOX_XY: Record<string, { x: number; y: number }> = {
-      Militär: { x: 100, y: 696 },
-      Öppen: { x: 161, y: 696 },
-      Standard: { x: 246, y: 696 },
+      Militär: { x: 77, y: 668 },
+      Öppen: { x: 129, y: 668 },
+      Standard: { x: 180, y: 668 },
     };
 
     const classBox = CLASS_CHECKBOX_XY[scoresStore.shooterClasses[shooter]];
@@ -147,7 +156,7 @@ export class PdfReportSv {
       if (scoresStore.disqualifications[shooter] !== undefined) {
         pages[0].drawText(scoresStore.disqualifications[shooter], {
           x: 36,
-          y: 90,
+          y: 70,
           size: 10,
         });
       }
@@ -171,12 +180,12 @@ export class PdfReportSv {
     // Time sum, point sum, hit factor
     pages[0].drawText(
       this.formatNumber(scoresStore.getShooterPointSum(shooter)),
-      { x: 552, y: 193, size: 10 },
+      { x: 552, y: 199, size: 10 },
     );
 
     pages[0].drawText(this.formatTime(scoresStore.getShooterTimeSum(shooter)), {
       x: 552,
-      y: 177,
+      y: 183,
       size: 10,
     });
 
@@ -184,7 +193,7 @@ export class PdfReportSv {
       this.formatHitFactorPdf(
         scoresStore.getShooterHitFactor(shooter as string),
       ),
-      { x: 552, y: 165, size: 10 },
+      { x: 552, y: 171, size: 10 },
     );
 
     // X Passed
@@ -194,7 +203,7 @@ export class PdfReportSv {
       scoresStore.getAllShot(shooter) &&
       hf >= SraShootingTest.requiredHitFactor
     ) {
-      pages[0].drawText("X", { x: 343, y: 105, size: 18 });
+      pages[0].drawText("X", { x: 369, y: 124, size: 18 });
     }
 
     // X Failed
@@ -203,29 +212,30 @@ export class PdfReportSv {
       (scoresStore.getAllShot(shooter) &&
         hf < SraShootingTest.requiredHitFactor)
     ) {
-      pages[0].drawText("X", { x: 399, y: 105, size: 18 });
+      pages[0].drawText("X", { x: 399, y: 124, size: 18 });
     }
 
     // Place and date
     if (scoresStore.testEvent_place != "") {
       pages[0].drawText(scoresStore.testEvent_place, {
-        x: 332,
-        y: 69,
+        x: 329,
+        y: 90,
         size: 10,
       });
     }
+
     if (scoresStore.testEvent_date != "") {
       pages[0].drawText(scoresStore.testEvent_date, {
-        x: 450,
-        y: 69,
+        x: 447,
+        y: 90,
         size: 10,
       });
     }
 
     // Receiving referee info
     pages[0].drawText(this.pdfRefereeInfo(scoresStore), {
-      x: 332,
-      y: 33,
+      x: 329,
+      y: 59,
       size: 10,
     });
 

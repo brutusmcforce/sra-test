@@ -57,7 +57,7 @@ const onShooterClass = (e: Event) =>
 
       <table class="course-info">
         <tbody>
-          <tr>
+          <tr v-if="locale !== 'sv'">
             <th>{{ t("shooter.birthDate") }}</th>
             <td>
               <input
@@ -143,6 +143,7 @@ const onShooterClass = (e: Event) =>
 
   & th {
     font-size: 100%;
+    padding: 0 0.5em;
   }
 }
 
