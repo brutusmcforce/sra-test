@@ -58,6 +58,10 @@ export default {
     birthDate: "Födelsedatum",
     courseNumber: "SRA-kursnummer eller annan identifierare",
     club: "RU/RES/MPKL-förening",
+    shooterClass: "Division",
+    shooterClassMilitar: "Militär",
+    shooterClassOppen: "Öppen",
+    shooterClassStandard: "Standard",
     disqualificationReason: "Orsak till underkännande:",
     scoreCardLink: "Resultatkort »",
     recordDq: "Registrera underkännande",
@@ -91,11 +95,11 @@ export default {
   },
   stages: {
     description: [
-      "10 m. Utgångsläge stående mot målen, riktid 5 s/serie. I serie 1 och 2 är pistolen i hölster, i serie 3 ligger den laddad på bordet (eller i handen om bord saknas). SERIE 1: 2 skott per mål, tvåhänt. SERIE 2: 2 skott per mål med starkare handen. SERIE 3: 2 skott per mål med svagare handen.",
-      "10 m. Utgångsläge: pistol laddad i hölster; serie 1 rygg mot målen, serie 2 vänster sida mot målen, serie 3 höger sida mot målen. Riktid 5 s/serie. SERIE 1: vändning 180° och 2 skott per mål. SERIE 2: vändning 90° och 2 skott per mål. SERIE 3: vändning 90° och 2 skott per mål.",
-      "10 m. Utgångsläge ryggen mot målen, händer upp, pistol laddad i hölster. Riktid 15 sekunder; skytten får välja om hen börjar från position A eller B. Utförande: vändning 180° och 2 skott i målet framför från position A eller B, förflyttning till andra positionen med magasinsbyte. Från position B/A 2 skott i målet framför, sedan förflyttning tillbaka till utgångsläget med magasinsbyte. Från utgångsläget 2 skott i målet framför.",
-      "20–15–10 m, riktid 25 sekunder. Start stående mot målen, pistol laddad i hölster. Utförande: 2 skott per mål från position A (20 m) stående; förflyttning med magasinsbyte till position B (15 m); 2 skott per mål från knästående; förflyttning med magasinsbyte till position C (10 m); 2 skott per mål liggande. Om liggande inte är möjligt på banan utförs även position C från knästående.",
-      "Valfritt gevär med pipan riktad 45° nedåt eller pistol laddad i hölster. Riktid 15 sekunder. Gevär: 20 m, start stående mot målen. Skytten väljer om hen börjar från position A eller B. Från utgångspositionen 2 skott i vartdera målet, förflyttning till position B/A, 2 skott i vartdera målet, förflyttning till position C, 2 skott i vartdera målet. Pistol: 10–15 m, start stående på 10 m mot målen. Från 10 m 2 skott i vartdera målet, förflyttning till 15 m, 2 skott i vartdera målet.",
+      "10m. Partid 5s/delmoment. Stående grundställning. Vid delmoment 1 och 2 är vapnet laddat och hölstrat. Vid delmoment 3 är vapnet laddat och hållet i stödhand. Delmoment 1: 2 skott mot varje figur med tvåhandsfattning. Delmoment 2: 2 skott mot varje figur med endast skjuthandsfattning. Delmoment 3: 2 skott mot varje figur med endast stödhandsfattning.",
+      "10m. Partid 5s / delmoment. Stående grundställning. Vapnet är laddat och hölstrat, vid delmoment 1 – ryggen vänd mot tavlorna, vid delmoment 2 – vänster sida vänd mot tavlorna, vid delmoment 3 – höger sida vänd mot tavlorna. Delmoment 1: Rotera 180° och skjut 2 skott mot varje tavla. Delmoment 2: Rotera 90° och skjut 2 skott mot varje tavla. Delmoment 3: Rotera 90° och skjut 2 skott mot varje tavla.",
+      "10m. Partid 15s. Stående grundställning, ryggen vänd mot tavlorna. Vapnet är laddat och hölstrat. Skytten väljer själv om denne startar från Box A eller B. Vid startsignal vänder sig skytten om och skjuter två skott mot närmsta tavla, därefter framrycker skytten till bortre box, byter magasin och skjuter 2 skott mot närmsta tavla, därefter framrycker skytten tillbaka till ursprungsbox, byter magasin och skjuter två skott mot närmsta tavla.",
+      "20–15–10m, riktid 25 sekunder. Start stående mot målen, pistol laddad i hölster. Utförande: 2 skott per mål från position A (20 m) stående; förflyttning med magasinsbyte till position B (15 m); 2 skott per mål från knästående; förflyttning med magasinsbyte till position C (10 m); 2 skott per mål liggande. Om liggande inte är möjligt på banan utförs även position C från knästående.",
+      "Valbar som pistol eller gevärs/karbinprov. Partid 15s. Gevär/Karbin 20m-15m. Stående grundställning. Skytten väljer själv om denne startar från Box F eller G. På startsignal skjuts två skott mot varje tavla från startbox, därefter framrycker skytten till bortre Box (F/G) och skjuter 2 skott mot varje tavla, därefter framrycker skytten till Box D och skjuter 2 skott mot varje tavla. Pistol: 10–15m, Stående grundställning i Box E. Vapnet laddat och hölstrat. Vid startsignal skjuts 2 skott mot varje tavla, därefter framrycker skytten till Box D och skjuter 2 skott mot varje tavla.",
     ],
   },
   scoreCard: {
@@ -127,11 +131,11 @@ export default {
     intro: "Följande regler för säker vapenhantering ska alltid följas:",
     rule1Bold: "Hantera alltid vapnet som om det vore laddat",
     rule1Body:
-      "Det spelar ingen roll om vapnet är laddat eller är ett dummyvapen — hanteringen ska alltid vara likadan.",
+      "Det spelar ingen roll om vapnet är laddat eller är en attrapp - hanteringen ska alltid vara likadan.",
     rule2Prefix: "Pipkontroll, ",
     rule2Bold: "vapnets pipa ska alltid peka i en säker riktning",
     rule2Body:
-      '"Laserregeln": vapnet får aldrig riktas mot något man inte är villig att förstöra.',
+      "Vapnet får aldrig riktas mot något man inte är villig att förstöra.",
     rule3Prefix: "Avtryckardisciplin, ",
     rule3Bold:
       "fingret hålls bort från avtryckaren tills beslutet att skjuta är fattat",

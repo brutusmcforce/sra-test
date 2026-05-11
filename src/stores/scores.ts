@@ -23,6 +23,7 @@ export const useScoresStore = defineStore("score", {
     birthDates: {} as Record<string, string>,
     courseNumbers: {} as Record<string, string>,
     clubs: {} as Record<string, string>,
+    shooterClasses: {} as Record<string, string>,
     order: "",
     referee_name: "",
     referee_sraid: "",
@@ -38,6 +39,7 @@ export const useScoresStore = defineStore("score", {
       );
       this.times[name] = Array.from({ length: 5 }, () => [0, 0, 0]);
       this.stage5Methods[name] = "pist";
+      this.shooterClasses[name] = "Militär";
 
       this.safetyTrainingCompleted = false;
     },
@@ -49,6 +51,7 @@ export const useScoresStore = defineStore("score", {
       delete this.birthDates[shooter];
       delete this.courseNumbers[shooter];
       delete this.clubs[shooter];
+      delete this.shooterClasses[shooter];
 
       if (Object.keys(this.times).length === 0) {
         this.safetyTrainingCompleted = false;
@@ -62,6 +65,9 @@ export const useScoresStore = defineStore("score", {
     },
     setClub(shooter: string, club: string) {
       this.clubs[shooter] = club;
+    },
+    setShooterClass(shooter: string, shooterClass: string) {
+      this.shooterClasses[shooter] = shooterClass;
     },
 
     getShooterStageTimes(shooter: string, stage: number): number[] {
@@ -184,6 +190,7 @@ export const useScoresStore = defineStore("score", {
       this.birthDates = {};
       this.courseNumbers = {};
       this.clubs = {};
+      this.shooterClasses = {};
     },
     randomizeOrder() {
       const current = Object.keys(this.scores);

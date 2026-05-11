@@ -12,7 +12,7 @@ import {
 } from '@/classes/Util'
 
 const route = useRoute()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const scoresStore = useScoresStore()
 
 const shooter = (route.params.shooter as string) ?? null
@@ -37,6 +37,8 @@ const onCourseNumber = (e: Event) =>
   scoresStore.setCourseNumber(shooter, (e.target as HTMLInputElement).value)
 const onClub = (e: Event) =>
   scoresStore.setClub(shooter, (e.target as HTMLInputElement).value)
+const onShooterClass = (e: Event) =>
+  scoresStore.setShooterClass(shooter, (e.target as HTMLSelectElement).value)
 </script>
 
 <template>
@@ -56,13 +58,23 @@ const onClub = (e: Event) =>
             <th>{{ t('shooter.birthDate') }}</th>
             <td><input type="date" :value="scoresStore.birthDates[shooter]" @change="onBirthDate" /></td>
           </tr>
-          <tr>
+          <tr v-if="locale !== 'sv'">
             <th>{{ t('shooter.courseNumber') }}</th>
             <td><input :value="scoresStore.courseNumbers[shooter]" @change="onCourseNumber" /></td>
           </tr>
-          <tr>
+          <tr v-if="locale !== 'sv'">
             <th>{{ t('shooter.club') }}</th>
             <td><input :value="scoresStore.clubs[shooter]" @change="onClub" /></td>
+          </tr>
+          <tr v-if="locale === 'sv'">
+            <th>{{ t('shooter.shooterClass') }}</th>
+            <td>
+              <select :value="scoresStore.shooterClasses[shooter]" @change="onShooterClass">
+                <option value="Militär">{{ t('shooter.shooterClassMilitar') }}</option>
+                <option value="Öppen">{{ t('shooter.shooterClassOppen') }}</option>
+                <option value="Standard">{{ t('shooter.shooterClassStandard') }}</option>
+              </select>
+            </td>
           </tr>
         </tbody>
       </table>
