@@ -245,9 +245,21 @@ const stageClasses = (currentStage: number, s: number) => {
   return "todo";
 };
 
+// Descriptions support `\n\n` as paragraph breaks and `**bold**` markers.
 const showDescription = (stage: number) => {
   const descriptions = tm("stages.description") as unknown as string[];
-  return descriptions[stage];
+  const raw = descriptions[stage] ?? "";
+  return raw
+    .split("\n\n")
+    .map((para) =>
+      para
+        .split(/(\*\*[^*]+\*\*)/)
+        .filter(Boolean)
+        .map((seg) => {
+          const bold = seg.startsWith("**") && seg.endsWith("**");
+          return { bold, text: bold ? seg.slice(2, -2) : seg };
+        }),
+    );
 };
 
 const onRecordDq = () => {
@@ -468,7 +480,12 @@ const confirmIncompleteEntry = (shooter: string, stage: number) => {
       <div class="stage-info" v-if="showStageInfo">
         <h2>{{ t("scoring.stage") }} {{ stage + 1 }}</h2>
 
-        <p>{{ showDescription(stage) }}</p>
+        <p v-for="(para, i) in showDescription(stage)" :key="i">
+          <template v-for="(seg, j) in para" :key="j">
+            <strong v-if="seg.bold">{{ seg.text }}</strong>
+            <template v-else>{{ seg.text }}</template>
+          </template>
+        </p>
 
         <div class="stage-info-button">
           <button class="close action" @click="showStageInfo = false">
@@ -687,6 +704,12 @@ div.stage-info {
   margin: 0 auto;
   padding: 10px 20px;
   background-color: #fff;
+}
+div.stage-info p {
+  margin-bottom: 1em;
+}
+div.stage-info strong {
+  font-weight: 700;
 }
 
 .stage-header-bar {
