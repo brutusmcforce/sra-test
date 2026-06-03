@@ -173,20 +173,6 @@ const exercises = [
   color: #777;
   white-space: nowrap;
 }
-.centerline {
-  position: absolute;
-  top: 1.5rem;
-  bottom: 1rem;
-  left: 50%;
-  width: 1px;
-  background: repeating-linear-gradient(
-    to bottom,
-    #bbb 0,
-    #bbb 4px,
-    transparent 4px,
-    transparent 8px
-  );
-}
 .row {
   position: relative;
   display: grid;
@@ -200,6 +186,7 @@ const exercises = [
   font-size: 0.8rem;
   font-weight: 700;
   color: #444;
+  min-width: 0;
 }
 .boxes {
   display: flex;
@@ -231,6 +218,7 @@ const exercises = [
   font-size: 0.72rem;
   color: #666;
   line-height: 1.3;
+  min-width: 0;
 }
 
 /* Exercises table */
@@ -255,8 +243,8 @@ const exercises = [
   width: 2.5rem;
 }
 .exercises .boxes-cell {
-  white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
 .exercises .note {
   color: #666;
@@ -270,11 +258,18 @@ const exercises = [
 }
 
 @media (max-width: 520px) {
-  .row {
-    grid-template-columns: auto auto 1fr;
+  .range-setup {
+    padding: 1rem 0.75rem 3rem;
   }
   .uses {
     font-size: 0.68rem;
+  }
+  .exercises {
+    font-size: 0.8rem;
+  }
+  .exercises th,
+  .exercises td {
+    padding: 0.4rem 0.35rem;
   }
 }
 </style>
