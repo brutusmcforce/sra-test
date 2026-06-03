@@ -34,6 +34,11 @@ const router = createRouter({
           component: ScoringView,
         },
         {
+          path: "/range-setup",
+          name: "rangeSetup",
+          component: () => import("../views/RangeSetupView.vue"),
+        },
+        {
           path: "/about",
           name: "about",
           component: () => import("../views/AboutView.vue"),

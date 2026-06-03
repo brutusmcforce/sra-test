@@ -6,6 +6,9 @@
           <RouterLink to="/"
             ><span class="icon">☰</span> {{ t("nav.resultList") }}</RouterLink
           >
+          <RouterLink to="/range-setup"
+            ><span class="icon">▦</span> {{ t("nav.rangeSetup") }}</RouterLink
+          >
           <RouterLink to="/rules"
             ><span class="icon">§</span> {{ t("nav.rules") }}</RouterLink
           >

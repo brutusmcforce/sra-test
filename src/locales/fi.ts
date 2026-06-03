@@ -9,6 +9,7 @@ export default {
   },
   nav: {
     resultList: "Tuloslista",
+    rangeSetup: "Radan kattaus",
     rules: "Säännöt",
     about: "Tietoja",
   },
