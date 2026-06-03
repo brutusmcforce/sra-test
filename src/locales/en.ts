@@ -9,7 +9,7 @@ export default {
   },
   nav: {
     resultList: "Test",
-    rangeSetup: "Range setup",
+    rangeSetup: "Range",
     rules: "Rules",
     about: "About",
   },
