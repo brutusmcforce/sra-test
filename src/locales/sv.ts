@@ -72,12 +72,9 @@ export default {
     autoDqReason: "Träfffaktor under {factor}.",
   },
   scoring: {
-    shootingNextWithLast:
-      "Skjuts. Nästa skytt {shooter}, sista skytten på denna station.",
-    shootingNextFinal:
-      "Skjuts. Nästa skytt {shooter}, sista skjutomgången i testet.",
-    shootingNextWithUpcoming:
-      "Skjuts. Nästa skytt {shooter}, {next} förbereder sig.",
+    shootingNextWithLast: "{shooter} skjuter, sista skytten på denna station.",
+    shootingNextFinal: "{shooter} skjuter, sista skjutomgången i testet.",
+    shootingNextWithUpcoming: "{shooter} skjuter, {next} förbereder sig.",
     stage: "Stn",
     stageHeader: "Station {stage} / {shooter}",
     method: "Vapen:",

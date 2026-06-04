@@ -69,12 +69,9 @@ export default {
     autoDqReason: "Hit factor below {factor}.",
   },
   scoring: {
-    shootingNextWithLast:
-      "Shooting. Next shooter {shooter}, the last shooter on this stage.",
-    shootingNextFinal:
-      "Shooting. Next shooter {shooter}, the final run of the test.",
-    shootingNextWithUpcoming:
-      "Shooting. Next shooter {shooter}, {next} preparing.",
+    shootingNextWithLast: "{shooter} shooting, the last shooter on this stage.",
+    shootingNextFinal: "{shooter} shooting, the final run of the test.",
+    shootingNextWithUpcoming: "{shooter} shooting, {next} preparing.",
     stage: "Stage",
     stageHeader: "Stage {stage} / {shooter}",
     method: "Method:",
